@@ -7,7 +7,6 @@
 
 #define VERSION ("0.1")
 
-
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
 #define RUN (1) // not a command, controls main loop
@@ -35,9 +34,13 @@ int COMHAN(int, char**);
 int isValidCommand(char*);
 int matches(char*, char*);
 void setDateUsage();
+void displayVersion();
+void displayTime();
+void displayHelp();
+void displayDate();
 
-
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
     // get input in a loop
     int running = RUN;
     char input[MAXINPUTSIZE];
@@ -49,7 +52,6 @@ int main(int argc, char **argv){
 	printf("\nTechOS >");
 	numTokens = 0;
 	fgets(input, MAXINPUTSIZE - MAXTOKENS - 1, stdin);
-
 
         // convert input into tokens for parsing options
 	token = strtok(input, " ");
@@ -77,7 +79,8 @@ int main(int argc, char **argv){
 
 
 
-int isValidCommand(char *command){
+int isValidCommand(char *command)
+{
     for(int i = 0; i < NUMCOMMANDS; i++){
 	if(matches(command, validCommands[i]))
 	    return 1;
@@ -86,7 +89,8 @@ int isValidCommand(char *command){
 }
     
 // returns 1 when string lhs matches string rhs
-int matches(char *lhs, char *rhs){
+int matches(char *lhs, char *rhs)
+{
     static int maxCmp = 100;
     //  printf("b");
     return (strncmp(lhs,rhs,maxCmp) == 0)? 1 : 0;
@@ -95,7 +99,8 @@ int matches(char *lhs, char *rhs){
 
 // Chooses the appropriate TechOS call after
 // parsing the input for arguments for that call
-int COMHAN(int numTokens, char **tokens){
+int COMHAN(int numTokens, char **tokens)
+{
     int opt;
     int c;
     int valid = 1;
@@ -116,10 +121,15 @@ int COMHAN(int numTokens, char **tokens){
 		year = atoi(optarg);
 		break;
 	    default:
-		setDateUsage();
+		printf("\nERROR: incorrect option");
 		break;
 	    }
 	}
+	// call setDate if all required options are there
+	if(month > 0 && day > 0 && year > 0){
+	    
+	}
+	else{setDateUsage();}
     }
     else if(matches(command, TIMECOMMAND)){
 	displayTime();
@@ -128,19 +138,17 @@ int COMHAN(int numTokens, char **tokens){
 	displayHelp();
     }
     else if(matches(command, SHOWDATECOMMAND)){
-	showDate();
+	displayDate();
     }
     else if(matches(command, VERSIONCOMMAND)){
-	showVersion();
+	displayVersion();
     }
     else if(matches(command, TERMINATECOMMAND)){
 	printf("\n\nTerminating ...");
 	return STOP;
     }
-    
-    
     while(optind < numTokens){
-	printf("\nProblem with: %s", tokens[optind++]);
+	printf("\nUnrecognized option: %s", tokens[optind++]);
     }
 
     return RUN;
@@ -148,7 +156,16 @@ int COMHAN(int numTokens, char **tokens){
 }
 
 
-void setDateUsage(){
+void setDateUsage()
+{
     printf("\nUsage for setdate: "\
 	   "\nsetdate -m <month> -d <day> -y <year>");
 }
+
+void displayVersion(){
+    printf("\nCS 450 Project\nTechOS\nVersion = %s", VERSION);
+}
+
+void displayHelp(){}
+void displayDate(){}
+void displayTime(){}
