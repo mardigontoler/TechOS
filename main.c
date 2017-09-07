@@ -5,6 +5,9 @@
 #include <ctype.h>
 #include <unistd.h>
 
+#define VERSION ("0.1")
+
+
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
 #define RUN (1) // not a command, controls main loop
@@ -31,6 +34,7 @@ char *validCommands[NUMCOMMANDS] = {
 int COMHAN(int, char**);
 int isValidCommand(char*);
 int matches(char*, char*);
+void setDateUsage();
 
 
 int main(int argc, char **argv){
@@ -89,49 +93,62 @@ int matches(char *lhs, char *rhs){
 }
 
 
+// Chooses the appropriate TechOS call after
+// parsing the input for arguments for that call
 int COMHAN(int numTokens, char **tokens){
     int opt;
     int c;
     int valid = 1;
     int parsing = 1;
     char* command = tokens[0];
-    while(parsing){
-	if(matches(command,SETDATECOMMAND)){
-	    c = getopt(numTokens, tokens, "m:d:y:");
+    // use getopt, usually used to parse argv
+    if(matches(command,SETDATECOMMAND)){
+	int month = -1, day = -1, year = -1;
+	while((c = getopt(numTokens, tokens, "m:d:y:")) != -1){
 	    switch(c){
 	    case 'm':
-		printf("\nMonth");
+		month = atoi(optarg); // atoi returns 0 if can't be parsed. Covered by setdate call
 		break;
 	    case 'd':
-		printf("\nDay");
+		day = atoi(optarg);
 		break;
 	    case 'y':
-		printf("\nYear");
+		year = atoi(optarg);
 		break;
 	    default:
-		parsing=0;
+		setDateUsage();
 		break;
 	    }
 	}
-	else if(matches(command, TIMECOMMAND)){
-	}
-	else if(matches(command, HELPCOMMAND)){
-	}
-	else if(matches(command, TIMECOMMAND)){
-	}
-	else if(matches(command, VERSIONCOMMAND)){
-	}
-	else if(matches(command, TERMINATECOMMAND)){
-	    printf("\n\nTerminating ...");
-	    return STOP;
-	}
-
     }
+    else if(matches(command, TIMECOMMAND)){
+	displayTime();
+    }
+    else if(matches(command, HELPCOMMAND)){
+	displayHelp();
+    }
+    else if(matches(command, SHOWDATECOMMAND)){
+	showDate();
+    }
+    else if(matches(command, VERSIONCOMMAND)){
+	showVersion();
+    }
+    else if(matches(command, TERMINATECOMMAND)){
+	printf("\n\nTerminating ...");
+	return STOP;
+    }
+    
+    
     while(optind < numTokens){
 	printf("\nProblem with: %s", tokens[optind++]);
-
     }
 
     return RUN;
 
+}
+
+
+void setDateUsage(){
+    printf("\nUsage for setdate: "\
+	   "\nsetdate -m <month> -d <day> -y <year>");
 }
