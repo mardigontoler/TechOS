@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <unistd.h>
 
+#include "datetime.h"
+
 #define VERSION ("0.1")
 
 #define MAXTOKENS (25)
@@ -34,10 +36,12 @@ int COMHAN(int, char**);
 int isValidCommand(char*);
 int matches(char*, char*);
 void setDateUsage();
+void helpUsage();
+void versionUsage();
+void timeUsage();
+void terminateUsage();
 void displayVersion();
-void displayTime();
-void displayHelp();
-void displayDate();
+void help(char *optarg, int showAll);
 
 int main(int argc, char **argv)
 {
@@ -106,6 +110,7 @@ int COMHAN(int numTokens, char **tokens)
     int valid = 1;
     int parsing = 1;
     char* command = tokens[0];
+    char *cvalue = NULL; // used to hold onto the optarg for the help function
     // use getopt, usually used to parse argv
     if(matches(command,SETDATECOMMAND)){
 	int month = -1, day = -1, year = -1;
@@ -127,18 +132,40 @@ int COMHAN(int numTokens, char **tokens)
 	}
 	// call setDate if all required options are there
 	if(month > 0 && day > 0 && year > 0){
-	    
+	    SetDate(month, day, year);
 	}
 	else{setDateUsage();}
     }
     else if(matches(command, TIMECOMMAND)){
-	displayTime();
+	char timeOption = 't';
+	while((c = getopt(numTokens, tokens, "tTS")) != -1){
+	    switch(c){
+	    case 't':
+	    case 'T':
+	    case 'S':
+		timeOption = c;
+	    }
+	}
+	printf("\n%s",GetTime(timeOption));
+
     }
     else if(matches(command, HELPCOMMAND)){
-	displayHelp();
+	int helped = 0;
+	while((c = getopt(numTokens, tokens, "c:")) != -1){
+	    switch(c){
+	    case 'c':
+		cvalue = optarg;
+		help(cvalue, 0);
+		helped = 1;
+		break;
+	    }
+	}
+	if(!helped){
+	    help("\0",1); // show all commands
+	}
     }
     else if(matches(command, SHOWDATECOMMAND)){
-	displayDate();
+	
     }
     else if(matches(command, VERSIONCOMMAND)){
 	displayVersion();
@@ -162,10 +189,41 @@ void setDateUsage()
 	   "\nsetdate -m <month> -d <day> -y <year>");
 }
 
+void timeUsage(){
+}
+
+void terminateUsage(){
+}
+
+void dateUsage(){
+}
+
+void helpUsage(){
+}
+
+void versionUsage(){
+}
+
 void displayVersion(){
     printf("\nCS 450 Project\nTechOS\nVersion = %s", VERSION);
 }
 
-void displayHelp(){}
-void displayDate(){}
-void displayTime(){}
+// when they ask for help, COMHAN gives help() the command,
+// and help() shows the usage
+void help(char *command, int showAll){
+    if(showAll){
+	printf("\nTechOS provides you with the following commands:");
+	for(int i = 0; i < NUMCOMMANDS; i++){
+	    printf("\n%s", validCommands[i]);
+	}
+    }
+    else{
+	// search for a command that they want the usage of
+	if(matches(HELPCOMMAND, command))helpUsage();
+	if(matches(VERSIONCOMMAND, command))versionUsage();
+	if(matches(SHOWDATECOMMAND, command))dateUsage();
+	if(matches(SETDATECOMMAND, command))setDateUsage();
+	if(matches(TIMECOMMAND, command))timeUsage();
+	if(matches(TERMINATECOMMAND, command))terminateUsage();
+    }
+}
