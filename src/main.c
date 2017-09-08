@@ -7,7 +7,8 @@
 
 #include "datetime.h"
 
-#define VERSION ("0.1")
+#define COMPLETIONDATE ("9/8/2017")
+#define VERSION ("1.1")
 
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
@@ -176,8 +177,12 @@ int COMHAN(int numTokens, char **tokens)
 	displayVersion();
     }
     else if(matches(command, TERMINATECOMMAND)){
-	printf("\n\nTerminating ...");
-	return STOP;
+	char prompt[100];
+	printf("\n\nYou are about to exit. Type \"y\" if you are sure:  ");
+	fgets(prompt, 99, stdin);
+	if(prompt[0] == 'y')
+	    return STOP;
+	
     }
     while(optind < numTokens){
 	printf("\nUnrecognized option: %s", tokens[optind++]);
@@ -201,12 +206,13 @@ void timeUsage(){
 
 void terminateUsage(){
     printf("\nUsage for exit:"\
-	   "\nexit\n");
+	   "\nexit\nYou will be asked if you're sure you want to exit. "\
+	   "Enter the letter \"y\" if you are sure.");
 }
 
 void dateUsage(){
     printf("\nUsage for date: "\
-	"\ndate (-d | -D | -f | -F | -g | -G | -m | -s | -y");
+	"\ndate (-d | -D | -f | -F | -g | -G | -m | -s | -y)");
 }
 
 void helpUsage(){
@@ -219,7 +225,10 @@ void versionUsage(){
 }
 
 void displayVersion(){
-    printf("\nCS 450 Project\nTechOS\nVersion = %s\n", VERSION);
+    printf("\nCS 450 Project\n"\
+	   "Russell Short, Mardigon Toler\n"\
+	   "TechOS\nVersion = %s\nCompletion Date:%s\n",
+	   VERSION, COMPLETIONDATE);
 }
 
 // when they ask for help, COMHAN gives help() the command,
