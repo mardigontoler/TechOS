@@ -75,6 +75,9 @@ int main(int argc, char **argv)
             // let the command handler figure out the command and deal with the options
 	    running = COMHAN(numTokens, tokens);
 	}
+	else{
+	    printf("\nERROR: command not recognized. Try \'help\'.\n");
+	}
     }
     puts("\n");
     return 0;
@@ -112,6 +115,9 @@ int COMHAN(int numTokens, char **tokens)
     char* command = tokens[0];
     char *cvalue = NULL; // used to hold onto the optarg for the help function
     // use getopt, usually used to parse argv
+
+    // every time COMHAN is called we want to reuse getopt, so we help it out with its index
+    optind = 1;
     if(matches(command,SETDATECOMMAND)){
 	int month = -1, day = -1, year = -1;
 	while((c = getopt(numTokens, tokens, "m:d:y:")) != -1){
@@ -139,12 +145,7 @@ int COMHAN(int numTokens, char **tokens)
     else if(matches(command, TIMECOMMAND)){
 	char timeOption = 't';
 	while((c = getopt(numTokens, tokens, "tTS")) != -1){
-	    switch(c){
-	    case 't':
-	    case 'T':
-	    case 'S':
-		timeOption = c;
-	    }
+	    timeOption = c;
 	}
 	printf("\n%s",GetTime(timeOption));
 
@@ -165,7 +166,11 @@ int COMHAN(int numTokens, char **tokens)
 	}
     }
     else if(matches(command, SHOWDATECOMMAND)){
-	
+	char dateOption = 'F';
+	while((c = getopt(numTokens, tokens, "dDfFgGmsy")) != -1){
+	    dateOption = c;
+	}
+	printf("\n%s",GetDate(dateOption));
     }
     else if(matches(command, VERSIONCOMMAND)){
 	displayVersion();
@@ -186,26 +191,35 @@ int COMHAN(int numTokens, char **tokens)
 void setDateUsage()
 {
     printf("\nUsage for setdate: "\
-	   "\nsetdate -m <month> -d <day> -y <year>");
+	   "\nsetdate -m <month> -d <day> -y <year>\n");
 }
 
 void timeUsage(){
+    printf("\nUsage for time "\
+	   "\ntime (-t | -T | -S)\n\nExample:\ntime -T\n");
 }
 
 void terminateUsage(){
+    printf("\nUsage for exit:"\
+	   "\nexit\n");
 }
 
 void dateUsage(){
+    printf("\nUsage for date: "\
+	"\ndate (-d | -D | -f | -F | -g | -G | -m | -s | -y");
 }
 
 void helpUsage(){
+    printf("\nUsage for help:"\
+	   "\nhelp [-c <command>]\n\nExample:\nhelp -c time\n");
 }
 
 void versionUsage(){
+    printf("\nUsage for version:\nversion\n");
 }
 
 void displayVersion(){
-    printf("\nCS 450 Project\nTechOS\nVersion = %s", VERSION);
+    printf("\nCS 450 Project\nTechOS\nVersion = %s\n", VERSION);
 }
 
 // when they ask for help, COMHAN gives help() the command,
@@ -216,14 +230,16 @@ void help(char *command, int showAll){
 	for(int i = 0; i < NUMCOMMANDS; i++){
 	    printf("\n%s", validCommands[i]);
 	}
+	printf("\n\nThe help command can tell you how to use the other commands!");
+	helpUsage();
     }
     else{
 	// search for a command that they want the usage of
-	if(matches(HELPCOMMAND, command))helpUsage();
-	if(matches(VERSIONCOMMAND, command))versionUsage();
-	if(matches(SHOWDATECOMMAND, command))dateUsage();
-	if(matches(SETDATECOMMAND, command))setDateUsage();
-	if(matches(TIMECOMMAND, command))timeUsage();
+	if(matches(HELPCOMMAND,      command))helpUsage();
+	if(matches(VERSIONCOMMAND,   command))versionUsage();
+	if(matches(SHOWDATECOMMAND,  command))dateUsage();
+	if(matches(SETDATECOMMAND,   command))setDateUsage();
+	if(matches(TIMECOMMAND,      command))timeUsage();
 	if(matches(TERMINATECOMMAND, command))terminateUsage();
     }
 }
