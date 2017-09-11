@@ -17,11 +17,21 @@ typedef struct{
 	int year;
 } Date;
 
-static Date date = { .month = 1, .day = 1, .year = 2009 };
+static Date date;
 
 char output[128];
 char time_string[64];
 
+/* Sets date to system's actual date */
+void InitDate(){
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+	date.month = tm.tm_mon+1;
+	date.day = tm.tm_mday;
+	date.year = tm.tm_year+1900;
+}
+
+/* Sets date to custom user date */
 int SetDate(int set_month, int set_day, int set_year){
 	switch (set_month){
 		case 1:
@@ -69,7 +79,9 @@ int SetDate(int set_month, int set_day, int set_year){
 	return 0;
 }
 
+/* Returns set date */
 char* GetDate(char print_option){
+
 	switch(print_option){
 
 		case 'd':	// short date: 5/4/2009
@@ -122,6 +134,7 @@ char* GetDate(char print_option){
 	return output;
 }
 
+/* returns time */
 char* GetTime(char print_option){
 
 	time_t current_time;

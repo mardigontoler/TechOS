@@ -53,6 +53,8 @@ int main(int argc, char **argv)
     char *token;
     int numTokens;
 
+    InitDate(); // sets date to today's date
+
     while(running){
 	printf("\nTechOS >");
 	numTokens = 0;
@@ -171,7 +173,7 @@ int COMHAN(int numTokens, char **tokens)
 	while((c = getopt(numTokens, tokens, "dDfFgGmsy")) != -1){
 	    dateOption = c;
 	}
-	printf("\n%s",GetDate(dateOption));
+	printf("\n%s\n",GetDate(dateOption));
     }
     else if(matches(command, VERSIONCOMMAND)){
 	displayVersion();
