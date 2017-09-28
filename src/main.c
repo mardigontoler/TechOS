@@ -6,43 +6,17 @@
 #include <unistd.h>
 
 #include "datetime.h"
-
-#define COMPLETIONDATE ("9/8/2017")
-#define VERSION ("1.1")
+#include "help.h"
 
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
 #define RUN (1) // not a command, controls main loop
 #define STOP (0)
 
-#define HELPCOMMAND ("help")
-#define VERSIONCOMMAND ("version")
-#define SHOWDATECOMMAND ("date")
-#define SETDATECOMMAND ("setdate")
-#define TIMECOMMAND ("time")
-#define TERMINATECOMMAND ("exit")
-#define NUMCOMMANDS (6)
 
-char *validCommands[NUMCOMMANDS] = {
-    HELPCOMMAND,
-    VERSIONCOMMAND,
-    SETDATECOMMAND,
-    TIMECOMMAND,
-    TERMINATECOMMAND,
-    SHOWDATECOMMAND
-};
 
 // prototypes
 int COMHAN(int, char**);
-int isValidCommand(char*);
-int matches(char*, char*);
-void setDateUsage();
-void helpUsage();
-void versionUsage();
-void timeUsage();
-void terminateUsage();
-void displayVersion();
-void help(char *optarg, int showAll);
 
 int main(int argc, char **argv)
 {
@@ -89,22 +63,10 @@ int main(int argc, char **argv)
 
 
 
-int isValidCommand(char *command)
-{
-    for(int i = 0; i < NUMCOMMANDS; i++){
-	if(matches(command, validCommands[i]))
-	    return 1;
-    }
-    return 0;
-}
-    
-// returns 1 when string lhs matches string rhs
-int matches(char *lhs, char *rhs)
-{
-    static int maxCmp = 100;
-    //  printf("b");
-    return (strncmp(lhs,rhs,maxCmp) == 0)? 1 : 0;
-}
+
+
+
+
 
 
 // Chooses the appropriate TechOS call after
@@ -143,7 +105,7 @@ int COMHAN(int numTokens, char **tokens)
 	if(month > 0 && day > 0 && year > 0){
 	    SetDate(month, day, year);
 	}
-	else{setDateUsage();}
+	else{printf(SETDATEUSAGE);}
     }
     else if(matches(command, TIMECOMMAND)){
 	char timeOption = 't';
@@ -194,63 +156,3 @@ int COMHAN(int numTokens, char **tokens)
 
 }
 
-
-void setDateUsage()
-{
-    printf("\nUsage for setdate: "\
-	   "\nsetdate -m <month> -d <day> -y <year>\n");
-}
-
-void timeUsage(){
-    printf("\nUsage for time "\
-	   "\ntime (-t | -T | -S)\n\nExample:\ntime -T\n");
-}
-
-void terminateUsage(){
-    printf("\nUsage for exit:"\
-	   "\nexit\nYou will be asked if you're sure you want to exit. "\
-	   "Enter the letter \"y\" if you are sure.");
-}
-
-void dateUsage(){
-    printf("\nUsage for date: "\
-	"\ndate (-d | -D | -f | -F | -g | -G | -m | -s | -y)");
-}
-
-void helpUsage(){
-    printf("\nUsage for help:"\
-	   "\nhelp [-c <command>]\n\nExample:\nhelp -c time\n");
-}
-
-void versionUsage(){
-    printf("\nUsage for version:\nversion\n");
-}
-
-void displayVersion(){
-    printf("\nCS 450 Project\n"\
-	   "Russell Short, Mardigon Toler\n"\
-	   "TechOS\nVersion = %s\nCompletion Date:%s\n",
-	   VERSION, COMPLETIONDATE);
-}
-
-// when they ask for help, COMHAN gives help() the command,
-// and help() shows the usage
-void help(char *command, int showAll){
-    if(showAll){
-	printf("\nTechOS provides you with the following commands:");
-	for(int i = 0; i < NUMCOMMANDS; i++){
-	    printf("\n%s", validCommands[i]);
-	}
-	printf("\n\nThe help command can tell you how to use the other commands!");
-	helpUsage();
-    }
-    else{
-	// search for a command that they want the usage of
-	if(matches(HELPCOMMAND,      command))helpUsage();
-	if(matches(VERSIONCOMMAND,   command))versionUsage();
-	if(matches(SHOWDATECOMMAND,  command))dateUsage();
-	if(matches(SETDATECOMMAND,   command))setDateUsage();
-	if(matches(TIMECOMMAND,      command))timeUsage();
-	if(matches(TERMINATECOMMAND, command))terminateUsage();
-    }
-}
