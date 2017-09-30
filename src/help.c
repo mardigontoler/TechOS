@@ -59,8 +59,10 @@ int isValidInt(char* str){
 int matches(char *lhs, char *rhs)
 {
     static int maxCmp = 100;
-    //  printf("b");
-    return (strncmp(lhs,rhs,maxCmp) == 0)? 1 : 0;
+    if(lhs != NULL){
+	return (strncmp(lhs,rhs,maxCmp) == 0)? 1 : 0;
+    }
+    return 0;
 }
 
 

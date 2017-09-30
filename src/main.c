@@ -14,7 +14,6 @@
 #define STOP (0)
 
 
-
 // prototypes
 int COMHAN(int, char**);
 
@@ -32,28 +31,29 @@ int main(int argc, char **argv)
     while(running){
 	printf("\n\e[34mTechOS >\e[39m");
 	numTokens = 0;
-	fgets(input, MAXINPUTSIZE - MAXTOKENS - 1, stdin);
-
-        // convert input into tokens for parsing options
-	token = strtok(input, " ");
-	while(token != NULL && numTokens < MAXTOKENS){
-	    if(!isspace(token[0]) && token[0] != '\0'){
-		numTokens += 1;
-		// strip off possible newline
-		if(strlen(token) > 1 && token[strlen(token) - 1] == '\n')
-		    token[strlen(token) - 1] = '\0';
-		tokens[numTokens - 1] = token;
+	if(fgets(input, MAXINPUTSIZE - MAXTOKENS - 1, stdin) != NULL)
+        {
+	    // convert input into tokens for parsing options
+	    token = strtok(input, " ");
+	    while(token != NULL && numTokens < MAXTOKENS){
+		if(!isspace(token[0]) && token[0] != '\0'){
+		    numTokens += 1;
+		    // strip off possible newline
+		    if(strlen(token) > 1 && token[strlen(token) - 1] == '\n')
+			token[strlen(token) - 1] = '\0';
+		    tokens[numTokens - 1] = token;
+		}
+		token = strtok(NULL, " ");
 	    }
-	    token = strtok(NULL, " ");
-	}
-	
-	int validCommand = 0;
-	if(isValidCommand(tokens[0])){
-            // let the command handler figure out the command and deal with the options
-	    running = COMHAN(numTokens, tokens);
-	}
-	else{
-	    printf("\nERROR: command not recognized. Try \'help\'.\n");
+	    
+	    int validCommand = 0;
+	    if(isValidCommand(tokens[0])){
+		// let the command handler figure out the command and deal with the options
+		running = COMHAN(numTokens, tokens);
+	    }
+	    else if(tokens[0] != NULL && tokens[0][0] != '\n'){
+		printf("\nERROR: command not recognized. Try \'help\'.\n");
+	    }
 	}
     }
     puts("\n");
@@ -193,20 +193,21 @@ int COMHAN(int numTokens, char **tokens)
     else if(matches(command, CREATEPCBCOMMAND)){
 	char *name;
 	int class = 0, priority = 0;
-	int valid = 1;
+	int nameSet = 0, classSet = 0, prioritySet = 0;
 	while((c = getopt(numTokens, tokens, "n:c:p:")) != -1){
 	    switch(c){
 	    case 'n':
 		name = optarg;
 		name[MAXPROCESSNAMESIZE] = '\0';
+		nameSet = 1;
 		break;
 	    case 'c':
 		class = atoi(optarg);
-		valid -= isValidInt(optarg);
+		classSet = isValidInt(optarg);
 		break;
 	    case 'p':
 		priority = atoi(optarg);
-		valid -= isValidInt(optarg);
+		prioritySet = isValidInt(optarg);
 		break;
 	    case '?':
 		printf("\nMissing argument.");
@@ -216,7 +217,7 @@ int COMHAN(int numTokens, char **tokens)
 		break;		
 	    }
 	}
-	if(valid <= 0 )
+	if(nameSet == 0 || prioritySet == 0 || classSet == 0)
 	    printf("\n%s\n", CREATEPCBUSAGE);
 	else{
 	    // create pcb
