@@ -2,6 +2,7 @@
 #include "help.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 char *validCommands[NUMCOMMANDS] = {
     HELPCOMMAND,
@@ -9,12 +10,31 @@ char *validCommands[NUMCOMMANDS] = {
     SETDATECOMMAND,
     TIMECOMMAND,
     TERMINATECOMMAND,
-    SHOWDATECOMMAND
+    SHOWDATECOMMAND,
+
+    // R2
+    SUSPENDCOMMAND,
+    RESUMECOMMAND,
+    SETPRIORITYCOMMAND,
+    SHOWPCBCOMMAND,
+    SHOWPROCESSESCOMMAND,
+    SHOWREADYPROCESSESCOMMAND,
+    SHOWBLOCKEDPROCESSESCOMMAND,
+    CREATEPCBCOMMAND,
+    DELETEPCBCOMMAND,
+    BLOCKPCBCOMMAND,
+    UNBLOCKPCBCOMMAND
 };
+
+// temp
+void deletePcb(char *name){
+    printf("here %s", name);
+}
 
 void displayVersion(){
     printf("Russell Short, Mardigon Toler\nTechOS\nVersion: %s\n%s", VERSION, COMPLETIONDATE);
 }
+
 
 
 int isValidCommand(char *command)
@@ -25,7 +45,16 @@ int isValidCommand(char *command)
     }
     return 0;
 }
-    
+
+int isValidInt(char* str){
+    // atoi returns 0 if conversion failed
+    // But the string might have actually been 0
+    if(atoi(str) == 0 && str[0] != '0')
+	return 0;
+    return 1;
+}
+
+
 // returns 1 when string lhs matches string rhs
 int matches(char *lhs, char *rhs)
 {
