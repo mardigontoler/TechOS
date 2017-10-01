@@ -5,6 +5,11 @@
 #define COMPLETIONDATE "10/2/2017"
 #define VERSION "2.0"
 
+#define BLUECOLOR "\e[34m"
+#define YELLOWCOLOR "\e[93m"
+#define DEFAULTCOLOR "\e[39m"
+#define REDCOLOR "\e[91m"
+
 #define NUMCOMMANDS (17)
 #define MAXPROCESSNAMESIZE (8)
 
@@ -28,47 +33,56 @@
 #define UNBLOCKPCBCOMMAND "unblock"
 
 
-#define SETDATEUSAGE "\nUsage for setdate: "\
-    "\nsetdate -m <month> -d <day> -y <year>\n"
+#define SETDATEUSAGE "\nUsage for " SETDATECOMMAND	\
+    "\n" SETDATECOMMAND " -m <month> -d <day> -y <year>\n"
 
-#define TIMEUSAGE "\nUsage for time "			\
-    "\ntime (-t | -T | -S)\n\nExample:\ntime -T\n"
+#define TIMEUSAGE "\nUsage for " TIMECOMMAND		\
+    "\n" TIMECOMMAND " (-t | -T | -S)\n\nExample:\ntime -T\n"
 
-#define TERMINATEUSAGE "\nUsage for exit:"				\
-    "\nexit\nYou will be asked if you're sure you want to exit. "   	\
+#define TERMINATEUSAGE "\nUsage for " TERMINATECOMMAND			\
+    "\n" TERMINATECOMMAND "\nYou will be asked if you're sure you want to exit. "   	\
     "Enter the letter \"y\" if you are sure."
 
-#define DATEUSAGE "\nUsage for date: "				\
-    "\ndate (-d | -D | -f | -F | -g | -G | -m | -s | -y)"
+#define DATEUSAGE "\nUsage for " SHOWDATECOMMAND		\
+    "\n" SHOWDATECOMMAND " (-d | -D | -f | -F | -g | -G | -m | -s | -y)"
 
-#define HELPUSAGE "\nUsage for help:"				\
-    "\nhelp [-c <command>]\n\nExample:\nhelp -c time\n" 
+#define HELPUSAGE "\nUsage for " HELPCOMMAND		\
+    "\n" HELPCOMMAND " [-c <command>]\n\nExample:\nhelp -c time\n" 
 
-#define VERSIONUSAGE "\nUsage for version:\nversion\n"
+#define VERSIONUSAGE "\nUsage for " VERSIONCOMMAND "\n" VERSIONCOMMAND
 
-#define SUSPENDUSAGE ""
+#define SUSPENDUSAGE "\nUsage for " SUSPENDCOMMAND	\
+    "\n"SUSPENDCOMMAND " -n <name>"
 
-#define RESUMEUSAGE ""
+#define RESUMEUSAGE "\nUsage for " RESUMECOMMAND	\
+    "\n" RESUMECOMMAND " -n <name>"
 
-#define SETPRIORITYUSAGE ""
+#define SETPRIORITYUSAGE "\nUsage for " SETPRIORITYCOMMAND	\
+    "\n" SETPRIORITYCOMMAND " -n <name> -p <priority>"
 
-#define SHOWPCBUSAGE ""
+#define SHOWPCBUSAGE "\nUsage for " SHOWPCBCOMMAND	\
+    "\n" SHOWPCBCOMMAND " -n <name>"
 
-#define SHOWPROCESSESUSAGE ""
+#define SHOWPROCESSESUSAGE "\nUsage for " SHOWPROCESSESCOMMAND	\
+    "\n" SHOWPROCESSESCOMMAND
 
-#define SHOWREADYPROCESSESUSAGE ""
+#define SHOWREADYPROCESSESUSAGE "\nUsage for " SHOWREADYPROCESSESCOMMAND \
+    "\n" SHOWREADYPROCESSESCOMMAND
 
-#define SHOWBLOCKEDPROCESSESUSAGE ""
+#define SHOWBLOCKEDPROCESSESUSAGE "\nUsage for " SHOWBLOCKEDPROCESSESCOMMAND \
+    "\n" SHOWBLOCKEDPROCESSESCOMMAND
 
-#define CREATEPCBUSAGE "\nUsage for create:"		\
-    "\ncreate -n <name> -p <priority> -c <class>\n"
+#define CREATEPCBUSAGE "\nUsage for " CREATEPCBCOMMAND	\
+    "\n" CREATEPCBCOMMAND " -n <name> -p <priority> -c <class>\n"
 
-#define DELETEPCBUSAGE "\nUsage for delete:"	\
-    "\ndelete -n <name>\n"
+#define DELETEPCBUSAGE "\nUsage for " DELETEPCBCOMMAND	\
+    "\n" DELETEPCBCOMMAND " -n <name>\n"
 
-#define BLOCKPCBUSAGE ""
+#define BLOCKPCBUSAGE "\nUsage for " BLOCKPCBCOMMAND	\
+    "\n" BLOCKPCBCOMMAND " -n <name>"
 
-#define UNBLOCKPCBUSAGE ""
+#define UNBLOCKPCBUSAGE "\nUsage for " UNBLOCKPCBCOMMAND	\
+    "\n" UNBLOCKPCBCOMMAND " -n <name>"
 
 
 int isValidCommand(char *);

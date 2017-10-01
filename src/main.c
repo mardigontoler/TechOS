@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     InitDate(); // sets date to today's date
 
     while(running){
-	printf("\n\e[34mTechOS >\e[39m");
+	printf("\n" BLUECOLOR "TechOS >" DEFAULTCOLOR);
 	numTokens = 0;
 	if(fgets(input, MAXINPUTSIZE - MAXTOKENS - 1, stdin) != NULL)
         {
@@ -170,25 +170,46 @@ int COMHAN(int numTokens, char **tokens)
     }
     else if(matches(command, TERMINATECOMMAND)){
 	char prompt[10];
-	printf("\n\nYou are about to exit. Type \"y\" if you are sure:  ");
+	printf(REDCOLOR "\n\nYou are about to exit. Type \"y\" if you are sure:  " DEFAULTCOLOR);
 	fgets(prompt, 8, stdin);
 	if(prompt[0] == 'y')
 	    return STOP;
     }
     else if(matches(command, SUSPENDCOMMAND)){
-
+	if(callWithProcessName(&suspend, numTokens, tokens) == 0)
+	    printf("\n%s\n", SUSPENDUSAGE);	
     }
     else if(matches(command, RESUMECOMMAND)){
+	if(callWithProcessName(&resume, numTokens, tokens) == 0)
+	    printf("\n%s\n", RESUME);	
     }
     else if(matches(command, SETPRIORITYCOMMAND)){
+	char *name;
+	int priority = 0, prioritySet = 0, nameSet = 0;
+	while((c = getopt(numTokens, tokens, "n:p:")) != -1){
+	    switch(c){
+	    case 'n':
+		name = optarg;
+		nameSet = 1;
+		break;
+	    case 'p':
+		priority = optarg;
+		prioritySet = isValidInt(optarg);
+	    }
+	}
     }
     else if(matches(command, SHOWPCBCOMMAND)){
+	if(callWithProcessName(&deletePcb, numTokens, tokens) == 0)
+	    printf("\n%s\n", SHOWPCBUSAGE);	
     }
     else if(matches(command, SHOWPROCESSESCOMMAND)){
+	// show processes
     }
     else if(matches(command, SHOWREADYPROCESSESCOMMAND)){
+	// show ready processes
     }
     else if(matches(command, SHOWBLOCKEDPROCESSESCOMMAND)){
+	// show blocked processes
     }
     else if(matches(command, CREATEPCBCOMMAND)){
 	char *name;
@@ -206,8 +227,8 @@ int COMHAN(int numTokens, char **tokens)
 		classSet = isValidInt(optarg);
 		break;
 	    case 'p':
-		priority = atoi(optarg);
 		prioritySet = isValidInt(optarg);
+		if(prioritySet)priority = atoi(optarg); // only set priority var if valid
 		break;
 	    case '?':
 		printf("\nMissing argument.");
@@ -225,18 +246,17 @@ int COMHAN(int numTokens, char **tokens)
     }
     else if(matches(command, DELETEPCBCOMMAND)){
 	if(callWithProcessName(&deletePcb, numTokens, tokens) == 0)
-	    printf("\n%s\n",DELETEPCBUSAGE);
+	    printf("\n%s\n", DELETEPCBUSAGE);
     }
     else if(matches(command, BLOCKPCBCOMMAND)){
-	
+	if(callWithProcessName(&blockPcb, numTokens, tokens) == 0)
+	    printf("\n%s\n", BLOCKPCBUSAGE);	
     }
     else if(matches(command, UNBLOCKPCBCOMMAND)){
+	if(callWithProcessName(&unblockPcb, numTokens, tokens) == 0)
+	    printf("\n%s\n", UNBLOCKPCBUSAGE);	
     }
-    while(optind < numTokens){
-	printf("\nUnrecognized option: %s", tokens[optind++]);
-    }
-
+    
     return RUN;
-
 }
 

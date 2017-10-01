@@ -69,6 +69,7 @@ int matches(char *lhs, char *rhs)
 // when they ask for help, COMHAN gives help() the command,
 // and help() shows the usage
 void help(char *command, int showAll){
+    printf(YELLOWCOLOR);
     if(showAll){
 	printf("\nTechOS provides you with the following commands:");
 	for(int i = 0; i < NUMCOMMANDS; i++){
@@ -79,11 +80,24 @@ void help(char *command, int showAll){
     }
     else{
 	// search for a command that they want the usage of
-	if(matches(HELPCOMMAND,      command))printf(HELPUSAGE);
-	if(matches(VERSIONCOMMAND,   command))printf(VERSIONUSAGE);
-	if(matches(SHOWDATECOMMAND,  command))printf(DATEUSAGE);
-	if(matches(SETDATECOMMAND,   command))printf(SETDATEUSAGE);
-	if(matches(TIMECOMMAND,      command))printf(TIMEUSAGE);
-	if(matches(TERMINATECOMMAND, command))printf(TERMINATEUSAGE);
+	if(matches(HELPCOMMAND,                 command))printf(HELPUSAGE);
+	if(matches(VERSIONCOMMAND,              command))printf(VERSIONUSAGE);
+	if(matches(SHOWDATECOMMAND,             command))printf(DATEUSAGE);
+	if(matches(SETDATECOMMAND,              command))printf(SETDATEUSAGE);
+	if(matches(TIMECOMMAND,                 command))printf(TIMEUSAGE);
+	if(matches(TERMINATECOMMAND,            command))printf(TERMINATEUSAGE);
+	// R2
+	if(matches(SUSPENDCOMMAND,              command))printf(SUSPENDUSAGE);
+	if(matches(RESUMECOMMAND,               command))printf(RESUMEUSAGE);
+	if(matches(SETPRIORITYCOMMAND,          command))printf(SETPRIORITYUSAGE);
+	if(matches(SHOWPCBCOMMAND,              command))printf(SHOWPCBUSAGE);
+	if(matches(SHOWPROCESSESCOMMAND,        command))printf(SHOWPROCESSESUSAGE);
+	if(matches(SHOWREADYPROCESSESCOMMAND,   command))printf(SHOWREADYPROCESSESUSAGE);
+	if(matches(SHOWBLOCKEDPROCESSESCOMMAND, command))printf(SHOWBLOCKEDPROCESSESUSAGE);
+	if(matches(CREATEPCBCOMMAND,            command))printf(CREATEPCBUSAGE);
+	if(matches(DELETEPCBCOMMAND,            command))printf(DELETEPCBUSAGE);
+	if(matches(BLOCKPCBCOMMAND,             command))printf(BLOCKPCBUSAGE);
+	if(matches(UNBLOCKPCBCOMMAND,           command))printf(UNBLOCKPCBUSAGE);
     }
+    printf(DEFAULTCOLOR);
 }
