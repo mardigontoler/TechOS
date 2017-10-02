@@ -187,6 +187,15 @@ int COMHAN(int numTokens, char **tokens)
 		prioritySet = isValidInt(optarg);
 	    }
 	}
+	if(nameSet && prioritySet){
+	    pcb* ptr;
+	    if((ptr=findFromArgName(numTokens, tokens)) != NULL){
+		ptr->priority = priority;
+	    }
+	    else{
+		printf("\n%s\n", SETPRIORITYUSAGE);
+	    }
+	}
     }
     else if(matches(command, SHOWPCBCOMMAND)){
 	pcb* ptr;
@@ -210,7 +219,8 @@ int COMHAN(int numTokens, char **tokens)
     }
     else if(matches(command, CREATEPCBCOMMAND)){
 	char *name;
-	int class = 0, priority = 0;
+	char class = 0;
+	int priority = 0;
 	int nameSet = 0, classSet = 0, prioritySet = 0;
 	while((c = getopt(numTokens, tokens, "n:c:p:")) != -1){
 	    switch(c){
@@ -220,8 +230,8 @@ int COMHAN(int numTokens, char **tokens)
 		nameSet = 1;
 		break;
 	    case 'c':
-		class = atoi(optarg);
-		classSet = isValidInt(optarg);
+		class = optarg[0];
+		classSet = 1; // TODO validate correct process class entered
 		break;
 	    case 'p':
 		prioritySet = isValidInt(optarg);
@@ -262,7 +272,7 @@ int COMHAN(int numTokens, char **tokens)
     }
     else if(matches(command, UNBLOCKPCBCOMMAND)){
 	pcb* ptr;
-	if((ptr = findFromArgname(numTokens, tokens)) != NULL){
+	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
 	    ptr->running_state = READY;
 	}
 	else{
