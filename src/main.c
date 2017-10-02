@@ -46,8 +46,7 @@ int main(int argc, char **argv)
 		    tokens[numTokens - 1] = token;
 		}
 		token = strtok(NULL, " ");
-	    }
-	    
+	    }	    
 	    int validCommand = 0;
 	    if(isValidCommand(tokens[0])){
 		// let the command handler figure out the command and deal with the options
@@ -223,9 +222,10 @@ int COMHAN(int numTokens, char **tokens)
     }
     else if(matches(command, CREATEPCBCOMMAND)){
 	char *name;
-	char class = 0;
+	unsigned char class = 0;
 	int priority = 0;
 	int nameSet = 0, classSet = 0, prioritySet = 0;
+	//optind = 1;
 	while((c = getopt(numTokens, tokens, "n:c:p:")) != -1){
 	    switch(c){
 	    case 'n':
@@ -252,14 +252,23 @@ int COMHAN(int numTokens, char **tokens)
 	if(nameSet == 0 || prioritySet == 0 || classSet == 0)
 	    printf("\n%s\n", CREATEPCBUSAGE);
 	else{
+	    printf("\nCreating process %s with priority %d and class %c.", name, priority, class);
 	    // create pcb
-	    SetupPCB(name, class, priority);
+	    pcb* ptr = SetupPCB(name, class, priority);
+	    if(ptr == NULL){
+		printf(REDCOLOR "\nERROR: Could not create the process. Exiting..." DEFAULTCOLOR);
+		exit(1);
+	    }
+	    else{
+		InsertPCB(ptr);
+	    }
 	}	    
     }
     else if(matches(command, DELETEPCBCOMMAND)){
         pcb *ptr;
 	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
 	    RemovePCB(ptr);
+	    FreePCB(ptr);
 	}
 	else{
 	    printf("\n%s\n", DELETEPCBUSAGE);
