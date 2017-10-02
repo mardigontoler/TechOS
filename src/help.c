@@ -65,10 +65,10 @@ int matches(char *lhs, char *rhs)
 void help(char *command, int showAll){
     printf(YELLOWCOLOR);
     if(showAll){
-	printf("\nTechOS provides you with the following commands:");
+	printf("\nTechOS provides you with the following commands:\n");
 	for(int i = 0; i < NUMCOMMANDS; i++){
-	    char b = (i % 2 == 0) ? '\t' : '\n'; // alternate tabs and newlines
-	    printf("%c%s", b, validCommands[i]);
+	    char *b = (i % 2 == 0) ? "\t\t" : "\n"; // alternate tabs and newlines
+	    printf("%s%s", b, validCommands[i]);
 	}
 	printf("\n\nThe help command can tell you how to use the other commands!");
 	printf(HELPUSAGE);
