@@ -1,5 +1,6 @@
 
 #include "help.h"
+#include "pcb.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -34,7 +35,6 @@ void deletePcb(char *name){
 void displayVersion(){
     printf("Russell Short, Mardigon Toler\nTechOS\nVersion: %s\n%s", VERSION, COMPLETIONDATE);
 }
-
 
 
 int isValidCommand(char *command)
@@ -73,7 +73,8 @@ void help(char *command, int showAll){
     if(showAll){
 	printf("\nTechOS provides you with the following commands:");
 	for(int i = 0; i < NUMCOMMANDS; i++){
-	    printf("\n%s", validCommands[i]);
+	    char b = (i % 2 == 0) ? '\t' : '\n'; // alternate tabs and newlines
+	    printf("%c%s", b, validCommands[i]);
 	}
 	printf("\n\nThe help command can tell you how to use the other commands!");
 	printf(HELPUSAGE);
@@ -87,8 +88,6 @@ void help(char *command, int showAll){
 	if(matches(TIMECOMMAND,                 command))printf(TIMEUSAGE);
 	if(matches(TERMINATECOMMAND,            command))printf(TERMINATEUSAGE);
 	// R2
-	if(matches(SUSPENDCOMMAND,              command))printf(SUSPENDUSAGE);
-	if(matches(RESUMECOMMAND,               command))printf(RESUMEUSAGE);
 	if(matches(SETPRIORITYCOMMAND,          command))printf(SETPRIORITYUSAGE);
 	if(matches(SHOWPCBCOMMAND,              command))printf(SHOWPCBUSAGE);
 	if(matches(SHOWPROCESSESCOMMAND,        command))printf(SHOWPROCESSESUSAGE);

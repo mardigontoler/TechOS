@@ -7,6 +7,7 @@
 
 #include "datetime.h"
 #include "help.h"
+#include "queue.h"
 
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
@@ -19,6 +20,7 @@ int COMHAN(int, char**);
 
 int main(int argc, char **argv)
 {
+    
     // get input in a loop
     int running = RUN;
     char input[MAXINPUTSIZE];
@@ -64,13 +66,10 @@ int main(int argc, char **argv)
 
 
 /**
-   Gets the name of a process from the command options
-   and calls the appropriate function
-   Returns 0 if not successful
-   Returns 1 otherwise
+   Gets pointer to the pcb from the command arguments
 **/
-int callWithProcessName(void (*func)(char*), int numTokens, char **tokens){
-    optind = 1;
+pcb* findFromArgName(int numTokens, char **tokens){
+    optind = 1; // help out getopt function
     int c;
     char *name;
     int valid = 0;
@@ -83,10 +82,9 @@ int callWithProcessName(void (*func)(char*), int numTokens, char **tokens){
 	default:;
 	}
 	if(valid){
-	    (func)(name);
-	    return 1;
+	    return FindPCB(name);
 	}
-	else return 0;
+	else return NULL;
     }
 }
 
@@ -175,14 +173,6 @@ int COMHAN(int numTokens, char **tokens)
 	if(prompt[0] == 'y')
 	    return STOP;
     }
-    else if(matches(command, SUSPENDCOMMAND)){
-	if(callWithProcessName(&suspend, numTokens, tokens) == 0)
-	    printf("\n%s\n", SUSPENDUSAGE);	
-    }
-    else if(matches(command, RESUMECOMMAND)){
-	if(callWithProcessName(&resume, numTokens, tokens) == 0)
-	    printf("\n%s\n", RESUME);	
-    }
     else if(matches(command, SETPRIORITYCOMMAND)){
 	char *name;
 	int priority = 0, prioritySet = 0, nameSet = 0;
@@ -199,17 +189,24 @@ int COMHAN(int numTokens, char **tokens)
 	}
     }
     else if(matches(command, SHOWPCBCOMMAND)){
-	if(callWithProcessName(&deletePcb, numTokens, tokens) == 0)
-	    printf("\n%s\n", SHOWPCBUSAGE);	
+	pcb* ptr;
+	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	    printPCB(ptr);
+	}
+	else{
+	    printf("\n%s\n", SHOWPCBUSAGE);
+	}
     }
     else if(matches(command, SHOWPROCESSESCOMMAND)){
-	// show processes
+	printAllProcesses();// show processes
     }
     else if(matches(command, SHOWREADYPROCESSESCOMMAND)){
 	// show ready processes
+	printReadyProcesses();
     }
     else if(matches(command, SHOWBLOCKEDPROCESSESCOMMAND)){
 	// show blocked processes
+	printBlockedProcesses();
     }
     else if(matches(command, CREATEPCBCOMMAND)){
 	char *name;
@@ -242,19 +239,35 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", CREATEPCBUSAGE);
 	else{
 	    // create pcb
-	}	
+	    SetupQueue(name, class, priority);
+	}	    
     }
     else if(matches(command, DELETEPCBCOMMAND)){
-	if(callWithProcessName(&deletePcb, numTokens, tokens) == 0)
+        pcb *ptr;
+	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	    RemovePCB(ptr);
+	}
+	else{
 	    printf("\n%s\n", DELETEPCBUSAGE);
+	}
     }
     else if(matches(command, BLOCKPCBCOMMAND)){
-	if(callWithProcessName(&blockPcb, numTokens, tokens) == 0)
-	    printf("\n%s\n", BLOCKPCBUSAGE);	
+        pcb* ptr;
+	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	    ptr->running_state = BLOCKED;
+	}
+	else{
+	    printf("\n%s\n", BLOCKPCBUSAGE);
+	}
     }
     else if(matches(command, UNBLOCKPCBCOMMAND)){
-	if(callWithProcessName(&unblockPcb, numTokens, tokens) == 0)
-	    printf("\n%s\n", UNBLOCKPCBUSAGE);	
+	pcb* ptr;
+	if((ptr = findFromArgname(numTokens, tokens)) != NULL){
+	    ptr->running_state = READY;
+	}
+	else{
+	    printf("\n%s\n", UNBLOCKPCBUSAGE);	    
+	}
     }
     
     return RUN;

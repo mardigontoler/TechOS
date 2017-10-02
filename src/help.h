@@ -1,12 +1,14 @@
+#include "pcb.h"
+
 #ifndef HELP_H
 #define HELP_H
-
 
 #define COMPLETIONDATE "10/2/2017"
 #define VERSION "2.0"
 
 #define BLUECOLOR "\e[34m"
 #define YELLOWCOLOR "\e[93m"
+#define MAGENTACOLOR "\e[95m
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
@@ -20,8 +22,6 @@
 #define TIMECOMMAND "time"
 #define TERMINATECOMMAND "exit"
 // R2 commands
-#define SUSPENDCOMMAND "suspend"
-#define RESUMECOMMAND "resume"
 #define SETPRIORITYCOMMAND "priority"
 #define SHOWPCBCOMMAND "pcb"
 #define SHOWPROCESSESCOMMAND "processes"
@@ -50,12 +50,6 @@
     "\n" HELPCOMMAND " [-c <command>]\n\nExample:\nhelp -c time\n" 
 
 #define VERSIONUSAGE "\nUsage for " VERSIONCOMMAND "\n" VERSIONCOMMAND
-
-#define SUSPENDUSAGE "\nUsage for " SUSPENDCOMMAND	\
-    "\n"SUSPENDCOMMAND " -n <name>"
-
-#define RESUMEUSAGE "\nUsage for " RESUMECOMMAND	\
-    "\n" RESUMECOMMAND " -n <name>"
 
 #define SETPRIORITYUSAGE "\nUsage for " SETPRIORITYCOMMAND	\
     "\n" SETPRIORITYCOMMAND " -n <name> -p <priority>"
@@ -91,9 +85,5 @@ void help(char *, int);
 void displayVersion();
 int isValidInt(char* str);
 
-/**
-   Temporary fake implementations of queue pcb ops
-**/
-void deletePcb(char *name);
 
 #endif
