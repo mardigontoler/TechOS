@@ -183,7 +183,7 @@ int COMHAN(int numTokens, char **tokens)
 		nameSet = 1;
 		break;
 	    case 'p':
-		priority = optarg;
+		priority = atoi(optarg);
 		prioritySet = isValidInt(optarg);
 	    }
 	}
@@ -193,8 +193,12 @@ int COMHAN(int numTokens, char **tokens)
 		ptr->priority = priority;
 	    }
 	    else{
-		printf("\n%s\n", SETPRIORITYUSAGE);
+		printf(REDCOLOR "\nERROR: Couldn't set that priority. Exiting..." DEFAULTCOLOR);
+		exit(1);
 	    }
+	}
+	else{
+	    printf("\n%s\n", SETPRIORITYUSAGE);
 	}
     }
     else if(matches(command, SHOWPCBCOMMAND)){
@@ -249,7 +253,7 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", CREATEPCBUSAGE);
 	else{
 	    // create pcb
-	    SetupQueue(name, class, priority);
+	    SetupPCB(name, class, priority);
 	}	    
     }
     else if(matches(command, DELETEPCBCOMMAND)){

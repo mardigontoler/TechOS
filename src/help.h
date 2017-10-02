@@ -1,18 +1,18 @@
-#include "pcb.h"
-
 #ifndef HELP_H
 #define HELP_H
+
+#include "queue.h"
 
 #define COMPLETIONDATE "10/2/2017"
 #define VERSION "2.0"
 
 #define BLUECOLOR "\e[34m"
 #define YELLOWCOLOR "\e[93m"
-#define MAGENTACOLOR "\e[95m
+#define MAGENTACOLOR "\e[95m"
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
-#define NUMCOMMANDS (17)
+#define NUMCOMMANDS (15)
 #define MAXPROCESSNAMESIZE (8)
 
 #define HELPCOMMAND "help"

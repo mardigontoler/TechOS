@@ -1,6 +1,6 @@
 
 #include "help.h"
-#include "pcb.h"
+#include "queue.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -14,8 +14,6 @@ char *validCommands[NUMCOMMANDS] = {
     SHOWDATECOMMAND,
 
     // R2
-    SUSPENDCOMMAND,
-    RESUMECOMMAND,
     SETPRIORITYCOMMAND,
     SHOWPCBCOMMAND,
     SHOWPROCESSESCOMMAND,
@@ -27,10 +25,6 @@ char *validCommands[NUMCOMMANDS] = {
     UNBLOCKPCBCOMMAND
 };
 
-// temp
-void deletePcb(char *name){
-    printf("here %s", name);
-}
 
 void displayVersion(){
     printf("Russell Short, Mardigon Toler\nTechOS\nVersion: %s\n%s", VERSION, COMPLETIONDATE);
