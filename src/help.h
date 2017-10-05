@@ -67,7 +67,9 @@
     "\n" SHOWBLOCKEDPROCESSESCOMMAND
 
 #define CREATEPCBUSAGE "\nUsage for " CREATEPCBCOMMAND	\
-    "\n" CREATEPCBCOMMAND " -n <name> -p <priority> -c <class>\n"
+    "\n" CREATEPCBCOMMAND " -n <name> -p<priority> -c<class>\n" \
+    " \nThe priority is a number from 0 to 9."							\
+    "\nThere is no space between the -p and the priority or -c and the class.\n" 
 
 #define DELETEPCBUSAGE "\nUsage for " DELETEPCBCOMMAND	\
     "\n" DELETEPCBCOMMAND " -n <name>\n"
