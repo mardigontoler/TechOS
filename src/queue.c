@@ -48,7 +48,7 @@ void initQueues() {
  * Returns either a pointer to the new PCB or NULL if there is an error during allocation.
  */
 pcb* AllocatePCB() {
-    pcb* alloc_process = malloc(sizeof(pcb*));
+    pcb* alloc_process = malloc(sizeof(pcb));
     return alloc_process;
 }
 
@@ -104,7 +104,7 @@ pcb* FindPCB(char* name){
             return find_pcb;
         }
         find_pcb = find_pcb->next_pcb;
-    } while(find_pcb != ready_queue.tail || find_pcb == NULL);
+    } while(find_pcb != NULL);
 
     find_pcb = blocked_queue.head;
     if(find_pcb == NULL){
@@ -116,7 +116,7 @@ pcb* FindPCB(char* name){
             return find_pcb;
         }
         find_pcb = find_pcb->next_pcb;
-    } while(find_pcb != blocked_queue.tail || find_pcb == NULL);
+    } while(find_pcb != NULL);
     printf("Did not find process %s", name);
     return NULL;
 }
@@ -143,6 +143,7 @@ void InsertPCB(pcb* process) {
         else {
             blocked_queue.head = process;
             blocked_queue.tail = process;
+	    process->next_pcb = NULL;
             blocked_queue.count++;
         }
 
@@ -155,15 +156,20 @@ void InsertPCB(pcb* process) {
                 ready_queue.head = process;
                 ready_queue.count++;
             }
+	    //else if(ready_queue.count == 1){
+		
+	    //}
             else {
                 pcb* store_temp_pcb = ready_queue.head;
-                pcb* temp_pcb = ready_queue.head->next_pcb;
+                pcb* temp_pcb = ready_queue.head;//->next_pcb; casuing problem when count is 1?
+		
                 while (temp_pcb != NULL && temp_pcb->priority > process->priority) {
                     store_temp_pcb = temp_pcb;
                     temp_pcb = temp_pcb->next_pcb;
                 }
                 if (temp_pcb->next_pcb == NULL){
                     temp_pcb->next_pcb = process;
+		    process->next_pcb = NULL;
                     ready_queue.tail = process;
                     ready_queue.count++;
                 }
@@ -174,9 +180,10 @@ void InsertPCB(pcb* process) {
                 }
             }
         }
-        else {
+        else { // queue was empty
             ready_queue.head = process;
             ready_queue.tail = process;
+	    process->next_pcb = NULL;
             ready_queue.count++;
         }
     }
@@ -197,33 +204,47 @@ int RemovePCB(pcb* process){
         if(blocked_queue.tail == process) {
             blocked_queue.tail = NULL;
         }
+	return 1;
     }
     index = blocked_queue.head;
-    while(index->next_pcb != NULL){
-        if (index->next_pcb->next_pcb == process) {
+    while(index != NULL && index->next_pcb != NULL){
+        if (index->next_pcb == process) {
             if (blocked_queue.tail == process) {
                 blocked_queue.tail = index->next_pcb;
             }
             index->next_pcb->next_pcb = process->next_pcb;
             process->next_pcb = NULL;
             blocked_queue.count--;
-            return 0;
+            return 1;
         }
+	index = index->next_pcb;
     }
     index = ready_queue.head;
-    while(index->next_pcb != NULL){
-        if (index->next_pcb->next_pcb == process) {
+    // case when the process is at the head
+    if(ready_queue.head == process){
+	if(ready_queue.tail == process){
+	    ready_queue.tail = NULL;
+	}
+	ready_queue.head = process->next_pcb;
+	process->next_pcb = NULL;
+	ready_queue.count--;
+	return 1;
+    }
+
+    while(index != NULL && index->next_pcb != NULL){
+        if (index->next_pcb == process) {
             if (ready_queue.tail == process) {
-                ready_queue.tail = index->next_pcb;
+                ready_queue.tail = index;
             }
-            index->next_pcb->next_pcb = process->next_pcb;
+            index->next_pcb = process->next_pcb;
             process->next_pcb = NULL;
             ready_queue.count--;
-            return 0;
+            return 1;
         }
+	index = index->next_pcb;
     }
-    printf("ERROR: Did not find process to be removed.");
-    return -1;
+    printf("\nERROR: Did not find process to be removed.");
+    return 0;
 }
 
 void printPCB(pcb* process){
@@ -231,7 +252,7 @@ void printPCB(pcb* process){
     printf("\nProcess name: %s ", process->process_name);
     printf("\nProcess class: %c", process->process_class);
     printf("\nRunning state: %d", process->running_state);
-    printf("\nPriority:  %d", process->priority);
+    printf("\nPriority:  %d\n", process->priority);
     printf(DEFAULTCOLOR);
 }
 
@@ -243,16 +264,18 @@ void printReadyProcesses(){
         printf("-------------\n");
         index = index->next_pcb;
     }
+    printf("\n");
 }
 
 void printBlockedProcesses(){
     pcb* index = blocked_queue.head;
     while(index != NULL) {
-        printf("-------------\n");
+        printf("-------------");
         printPCB(index);
         printf("-------------\n");
         index = index->next_pcb;
     }
+    printf("\n");    
 }
 
 void printAllProcesses(){

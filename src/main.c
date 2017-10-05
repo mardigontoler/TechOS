@@ -27,6 +27,9 @@ int main(int argc, char **argv)
     char *tokens[MAXTOKENS]; // array of tokens (array of pointers to strings)
     char *token;
     int numTokens;
+
+    // set up queues
+    initQueues();
     
     InitDate(); // sets date to today's date
 
@@ -83,8 +86,8 @@ pcb* findFromArgName(int numTokens, char **tokens){
 	if(valid){
 	    return FindPCB(name);
 	}
-	else return NULL;
     }
+    return NULL;
 }
 
 
@@ -277,7 +280,9 @@ int COMHAN(int numTokens, char **tokens)
     else if(matches(command, BLOCKPCBCOMMAND)){
         pcb* ptr;
 	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	    RemovePCB(ptr);
 	    ptr->running_state = BLOCKED;
+	    InsertPCB(ptr); // will now get inserted into the other queue
 	}
 	else{
 	    printf("\n%s\n", BLOCKPCBUSAGE);
@@ -286,7 +291,9 @@ int COMHAN(int numTokens, char **tokens)
     else if(matches(command, UNBLOCKPCBCOMMAND)){
 	pcb* ptr;
 	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	    RemovePCB(ptr);
 	    ptr->running_state = READY;
+	    InsertPCB(ptr); // will now get inserted into the other queue
 	}
 	else{
 	    printf("\n%s\n", UNBLOCKPCBUSAGE);	    
