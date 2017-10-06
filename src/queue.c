@@ -58,6 +58,7 @@ pcb* AllocatePCB() {
  */
 int FreePCB(pcb* process) {
     free(process);
+    return 0;
 }
 
 /**
@@ -100,7 +101,6 @@ pcb* FindPCB(char* name){
     do {
 	
         if(strcmp(name, find_pcb->process_name) == 0) {
-            printf("Found it!\n");
             return find_pcb;
         }
         find_pcb = find_pcb->next_pcb;
@@ -112,12 +112,12 @@ pcb* FindPCB(char* name){
     }
     do {
         if(strcmp(name, find_pcb->process_name) == 0) {
-            printf("Found it!\n");
+            // printf("Found it!\n");
             return find_pcb;
         }
         find_pcb = find_pcb->next_pcb;
     } while(find_pcb != NULL);
-    printf("Did not find process %s", name);
+    //printf("Did not find process %s", name);
     return NULL;
 }
 
@@ -139,53 +139,57 @@ void InsertPCB(pcb* process) {
             blocked_queue.tail->next_pcb = process;
             blocked_queue.tail = process;
             blocked_queue.count++;
+            return;
         }
         else {
             blocked_queue.head = process;
             blocked_queue.tail = process;
-	    process->next_pcb = NULL;
+	        process->next_pcb = NULL;
             blocked_queue.count++;
+            return;
         }
 
     // READY QUEUE
     }
     else {
-        if (ready_queue.count != 0) {
-            if (process->priority > ready_queue.head->priority){
-                process->next_pcb = ready_queue.head;
-                ready_queue.head = process;
-                ready_queue.count++;
-            }
-	    //else if(ready_queue.count == 1){
-		
-	    //}
-            else {
-                pcb* store_temp_pcb = ready_queue.head;
-                pcb* temp_pcb = ready_queue.head;//->next_pcb; casuing problem when count is 1?
-		
-                while (temp_pcb != NULL && temp_pcb->priority > process->priority) {
-                    store_temp_pcb = temp_pcb;
-                    temp_pcb = temp_pcb->next_pcb;
-                }
-                if (temp_pcb->next_pcb == NULL){
-                    temp_pcb->next_pcb = process;
-		    process->next_pcb = NULL;
-                    ready_queue.tail = process;
-                    ready_queue.count++;
-                }
-                else {
-                    process->next_pcb = temp_pcb;
-                    store_temp_pcb->next_pcb = process;
-                    ready_queue.count++;
-                }
-            }
-        }
-        else { // queue was empty
+
+        /* If the queue is empty */
+        if(ready_queue.count == 0){
             ready_queue.head = process;
             ready_queue.tail = process;
-	    process->next_pcb = NULL;
+            process -> next_pcb = NULL;
             ready_queue.count++;
+            return;
         }
+        /* If the queue isn't empty */
+        /* Highest Priority */
+        if (process->priority >= ready_queue.head->priority){
+            process->next_pcb = ready_queue.head;
+            ready_queue.head = process;
+            ready_queue.count++;
+            return;
+        }
+
+        /* Higher Priority */
+        pcb* temp_pcb = ready_queue.head;
+        pcb* prev_temp_pcb = ready_queue.head;
+        while (temp_pcb->next_pcb != NULL){
+            prev_temp_pcb = temp_pcb;
+            temp_pcb = temp_pcb->next_pcb;
+            if (process->priority >= temp_pcb->priority) {
+                prev_temp_pcb->next_pcb = process;
+                process->next_pcb = temp_pcb;
+                ready_queue.count++;
+                return;
+            }
+        }
+
+        /* Lowest Priority */
+        temp_pcb->next_pcb = process;
+        ready_queue.tail = process;
+        process->next_pcb = NULL;
+        ready_queue.count++;
+        return;
     }
 }
 
@@ -249,10 +253,10 @@ int RemovePCB(pcb* process){
 
 void printPCB(pcb* process){
     printf(MAGENTACOLOR);
-    printf("\nProcess name: %s ", process->process_name);
-    printf("\nProcess class: %c", process->process_class);
-    printf("\nRunning state: %d", process->running_state);
-    printf("\nPriority:  %d\n", process->priority);
+    printf("Process name: %s\n", process->process_name);
+    printf("Process class: %c\n", process->process_class);
+    printf("Running state: %d\n", process->running_state);
+    printf("Priority:  %d\n\n", process->priority);
     printf(DEFAULTCOLOR);
 }
 
@@ -270,7 +274,7 @@ void printReadyProcesses(){
 void printBlockedProcesses(){
     pcb* index = blocked_queue.head;
     while(index != NULL) {
-        printf("-------------");
+        printf("-------------\n");
         printPCB(index);
         printf("-------------\n");
         index = index->next_pcb;
