@@ -201,13 +201,21 @@ int COMHAN(int numTokens, char **tokens)
 			}
 		}
 		if(nameSet && prioritySet){
-			pcb* pcb_ptr = FindPCB(name);
+		    // Find the PCB, remove it from its queue, change its priority, and put back in queue
+		    pcb* pcb_ptr = FindPCB(name);
+		    if(pcb_ptr != NULL){
+			RemovePCB(pcb_ptr);
 			pcb_ptr->priority = priority;
+			InsertPCB(pcb_ptr);
+		        
+		    }
+		    else{
+			printf(REDCOLOR "The process was not found, so no priorities were changed.\n" DEFAULTCOLOR);
+		    }
 		}
 		else{
-			printf(REDCOLOR "\nERROR: Couldn't set that priority. Exiting..." DEFAULTCOLOR);
+			printf(REDCOLOR "\nERROR: Couldn't set that priority." DEFAULTCOLOR);
 			printf("\n%s\n", SETPRIORITYUSAGE);
-			exit(1);
 		}
 	}
 
@@ -272,7 +280,6 @@ int COMHAN(int numTokens, char **tokens)
 			printf("\n%s\n", CREATEPCBUSAGE);
 		else{
 			printf("\nCreating process %s with priority %d and class %c.", name, priority, class);
-	    // create pcb
 			pcb* ptr = SetupPCB(name, class, priority);
 			if(ptr == NULL){
 				printf(REDCOLOR "\nERROR: Could not create the process. Exiting..." DEFAULTCOLOR);
