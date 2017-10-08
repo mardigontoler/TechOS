@@ -12,7 +12,7 @@
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
-#define NUMCOMMANDS (15)
+#define NUMCOMMANDS (17)
 #define MAXPROCESSNAMESIZE (8)
 
 #define HELPCOMMAND "help"
@@ -31,6 +31,8 @@
 #define DELETEPCBCOMMAND "delete"
 #define BLOCKPCBCOMMAND "block"
 #define UNBLOCKPCBCOMMAND "unblock"
+#define SUSPENDPCBCOMMAND "suspend"
+#define RESUMEPCBCOMMAND "resume"
 
 
 #define SETDATEUSAGE "\nUsage for " SETDATECOMMAND	\
@@ -80,6 +82,11 @@
 #define UNBLOCKPCBUSAGE "\nUsage for " UNBLOCKPCBCOMMAND	\
     "\n" UNBLOCKPCBCOMMAND " -n <name>"
 
+#define SUSPENDPCBUSAGE "\nUSage for " SUSPENDPCBCOMMAND	\
+    "\n" SUSPENDPCBCOMMAND " -n <name>"
+
+#define RESUMEPCBUSAGE "\nUsage for " RESUMEPCBCOMMAND	\
+    "\n" RESUMEPCBCOMMAND " -n <name>"
 
 int isValidCommand(char *);
 int matches(char *, char *);
