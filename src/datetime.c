@@ -6,7 +6,7 @@
 
 const char *month_strings[12] = {
 	"January", "February", "March", "April", "May", "June", "July",
-	"August", "September", "November", "December"
+	"August", "September", "October", "November", "December"
 };
 
 /* saves and displays the date and time on the system. */
@@ -43,7 +43,7 @@ int SetDate(int set_month, int set_day, int set_year){
 		case 12:
 			/* 31 days in these months */
 			if (set_day < 1 || set_day > 31){
-				printf("ERROR: There isn't a %d of %s!\n", 
+				printf("\nERROR: There isn't a %d of %s!", 
 					set_day, month_strings[set_month-1]);
 				return -1;
 			}
@@ -54,7 +54,7 @@ int SetDate(int set_month, int set_day, int set_year){
 		case 11:
 			/* 30 days in these months */
 			if (set_day < 1 || set_day > 30){
-				printf("ERROR: There isn't a %d of %s!\n", 
+				printf("\nERROR: There isn't a %d of %s!", 
 					set_day, month_strings[set_month-1]);
 				return -1;
 			}
@@ -62,15 +62,15 @@ int SetDate(int set_month, int set_day, int set_year){
 		case 2:
 			/* lol february */
 			if (set_day < 1 || set_day > 29){
-				printf("ERROR: There isn't a %d of %s!\n", 
+				printf("\nERROR: There isn't a %d of %s!", 
 					set_day, month_strings[set_month-1]);
 			}
 			if (set_day == 29){
-				printf("This program doesn't have a leap year handler, just this print statement.\n");
+				printf("\nThis program doesn't have a leap year handler, just this print statement.");
 			}
 			break;
 		default:
-			printf("ERROR: Please enter a valid month.\n");
+			printf("\nERROR: Please enter a valid month.");
 			return -1;
 	}
 	date.month 	= set_month;
