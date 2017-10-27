@@ -20,13 +20,6 @@
  *
  */
 
-
-struct queue {
-    int count;
-    pcb* head;
-    pcb* tail;
-};
-
 struct queue ready_queue;   // Holds all processes in the ready state, sorted by priority.
 struct queue blocked_queue; // Holds all processes in the blocked state, sorted FIFO.
 struct queue suspended_ready_queue;
@@ -35,7 +28,7 @@ struct queue suspended_blocked_queue;
 /***
  * Initializes all queues for use.
  */
-void initQueues() {
+void initQueues(struct queue* q) {
     ready_queue.count = 0;
     ready_queue.head = NULL;
     ready_queue.tail = NULL;
@@ -315,4 +308,27 @@ void printAllProcesses(){
     printReadyProcesses();
     printBlockedProcesses();
 }
+
+/**
+ * Returns the pcb at the front of the ready queue
+ */
+pcb* GetNextReadyNotSuspended(){
+    return ready_queue.head;
+}
+
+pcb* GetNextReadySuspended(){
+    return suspended_ready_queue.head;
+}
+
+/**
+ *Returns the pcb at the front of the blocked queue
+ */
+pcb* GetNextBlockedNotSuspended(){
+    return blocked_queue.head;
+}
+
+pcb* GetNextBlockedSuspended(){
+    return suspended_blocked_queue.head;
+}
+
 

@@ -24,7 +24,8 @@ char *validCommands[NUMCOMMANDS] = {
     BLOCKPCBCOMMAND,
     UNBLOCKPCBCOMMAND,
     SUSPENDPCBCOMMAND,
-    RESUMEPCBCOMMAND
+    RESUMEPCBCOMMAND,
+    DISPATCHCOMMAND
 };
 
 
@@ -93,6 +94,7 @@ void help(char *command, int showAll){
 	if(matches(DELETEPCBCOMMAND,            command))printf(DELETEPCBUSAGE);
 	if(matches(BLOCKPCBCOMMAND,             command))printf(BLOCKPCBUSAGE);
 	if(matches(UNBLOCKPCBCOMMAND,           command))printf(UNBLOCKPCBUSAGE);
+	if(matches(DISPATCHCOMMAND,             command))printf(DISPATCHUSAGE);
     }
     printf(DEFAULTCOLOR);
 }

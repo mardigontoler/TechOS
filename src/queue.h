@@ -24,6 +24,12 @@ typedef struct pcb {
     struct pcb* next_pcb;           // Pointer to next pcb
 } pcb;
 
+struct queue {
+    int count;
+    pcb* head;
+    pcb* tail;
+};
+
 void initQueues();
 void printPCB(pcb* process);
 pcb* AllocatePCB();
@@ -35,6 +41,10 @@ int RemovePCB(pcb* process);
 void printAllProcesses();
 void printReadyProcesses();
 void printBlockedProcesses();
+pcb* GetNextReadyNotSuspended();
+pcb* GetNextReadySuspended();
+pcb* GetNextBlockedNotSuspended();
+pcb* GetNextlockedSuspended();
 
 #endif
 

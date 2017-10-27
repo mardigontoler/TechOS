@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "datetime.h"
 #include "help.h"
@@ -17,6 +18,8 @@
 
 // prototypes
 int COMHAN(int, char**);
+void dispatchReady();
+
 
 int main(int argc, char **argv)
 {
@@ -27,9 +30,13 @@ int main(int argc, char **argv)
     char *tokens[MAXTOKENS]; // array of tokens (array of pointers to strings)
     char *token;
     int numTokens;
+
+    time_t t;
+    localtime(&t);
+    srand(t);
     
     // set up queues
-    initQueues();
+    initQueues();    
     
     InitDate(); // sets date to today's date
     
@@ -346,6 +353,89 @@ int COMHAN(int numTokens, char **tokens)
 	    printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);	    
 	}	
     }
+    else if(matches(command, DISPATCHCOMMAND)){
+	dispatchReady();
+    }
     
     return RUN;
+}
+
+/**
+ * Use the execute binary to run all processes in the ready queue
+ * Processes should change from ready to running as they are dispatched
+ * A nonzero return value from the system call indicates that the process
+ * has experienced an interupt
+ **/
+void dispatchReady(){
+    pcb* oldHead = GetNextReadyNotSuspended();    
+    if(oldHead == NULL){
+	printf(REDCOLOR "ERROR: No ready processes to dispatch!\n");
+	return;
+    }
+    while(oldHead != NULL){
+	// it is now running, remove it from whatever queue it was in and reset its properties
+	RemovePCB(oldHead);
+	oldHead->running_state = RUNNING;
+	oldHead->suspension_state = NOTSUSPENDED;
+	char systemArgument[100];
+	char* executeCommand = "./execute ";
+	char* offsetString = atoi(oldHead->offset + 1); // add 1 to offset before changing to string
+	//system("./execute " oldHead->path offsetString);
+	// need to copy info into systemArgument and use that to cal system()
+	strcat(systemArgument, executeCommand);
+	strcat(systemArgument, oldHead->processFile);
+	strcat(systemArgument, offseString);
+
+	// run the 'execute' binary with the PPCB's offset + 1
+	// the return value will indicate whether there was an interrupt.
+	// 0 indicates that the process is finished and should be removed
+	// Otherwise there was an interrupt. The interrupt value should be divided by 256
+	// and stored as the offset of the process's PCB
+	printf("\nDEBUG systemArgument %s\n",systemArgument);
+	int interrupt = system(systemArgument);
+
+	if(interrupt == 0){
+	    FreePCB(oldHead);
+	}
+	else{
+	    // there was an interrupt
+	    // block and suspend
+	    oldHead->offset = interrupt/256;
+	    RemovePCB(oldHead);
+	    oldHead->suspension_state = SUSPENDED;
+	    oldHead->running_status = BLOCKED;
+	    InsertPCB(oldHead);
+	}
+	// we need to choose the next process to dispatch.
+	// If the ready queue is empty, just unblock a process in the blocked queue
+	// and unsuspend it and run it.
+	// If neither queue is empty, it's 50/50 whether we run the next ready process
+	// or the next blocked process
+
+	// THIS IS ASSUMING (as per module 3 instructoins) THAT ALL READY PROCESSES
+	// WILL NOT BE SUSPENDED AND THAT ALL BLOKCED PROCESSES WILL BE SUSPENDED
+
+	// Check if there are no ready processes but there are blocked processes
+	if(GetNextReady() == NULL && GetNextBlockedSuspended() != NULL){
+	    oldHead = GetNextBlockedSuspended();
+	}
+	//check if there are ready processes but no blocked processes
+	else if(GetNextReady() != NULL && GetNextBlocked() == NULL){
+	    oldHead = GetNextReadyNotSuspended();
+	}
+	// check if both are not empty
+	else if(GetNextReady() != NULL && GetNextBlocked() != NULL){
+	    // choose blocked or unblocked 50/50
+	    if(rand()%10 >= 5){
+		oldHead = GetNextReadyNotSuspended();
+	    }
+	    else{
+		oldHead = GetNextBlockedSuspended();
+	    }
+	}
+	// otherwise, there are no more processes remaining in either queue
+	else{
+	    oldHead = NULL;
+	}
+    }
 }

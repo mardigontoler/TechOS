@@ -12,7 +12,7 @@
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
-#define NUMCOMMANDS (17)
+#define NUMCOMMANDS (18)
 #define MAXPROCESSNAMESIZE (8)
 
 #define HELPCOMMAND "help"
@@ -33,7 +33,10 @@
 #define UNBLOCKPCBCOMMAND "unblock"
 #define SUSPENDPCBCOMMAND "suspend"
 #define RESUMEPCBCOMMAND "resume"
+#define DISPATCHCOMMAND "dispatch"
 
+#define DISPATCHUSAGE "\nUsage for " DISPATCHCOMMAND	\
+    "\n " DISPATCHCOMMAND "\nBegins all processes that are ready.\n"
 
 #define SETDATEUSAGE "\nUsage for " SETDATECOMMAND	\
     "\n" SETDATECOMMAND " -m <month> -d <day> -y <year>\n"
