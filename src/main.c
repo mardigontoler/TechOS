@@ -431,9 +431,9 @@ void dispatchReady(){
 	RemovePCB(oldHead);
 	oldHead->running_state = RUNNING;
 	oldHead->suspension_state = NOTSUSPENDED;
-        InsertPCB(oldHead);
+        //InsertPCB(oldHead);
 	char systemArgument[100];
-	char* executeCommand = "./execute.exe ";
+	char* executeCommand = "./execute ";
         
         sprintf(systemArgument, "%s %s %d", executeCommand, oldHead->file_name, oldHead->offset+1);
 	//system("./execute " oldHead->path offsetString);
@@ -448,7 +448,7 @@ void dispatchReady(){
 	// 0 indicates that the process is finished and should be removed
 	// Otherwise there was an interrupt. The interrupt value should be divided by 256
 	// and stored as the offset of the process's PCBdispa
-	printf("\nDEBUG systemArgument %s\n",systemArgument);
+	//printf("\nDEBUG systemArgument %s\n",systemArgument);
 	int interrupt = system(systemArgument);
         printf("\n%d", interrupt);
 	if(interrupt == 0){
@@ -473,15 +473,15 @@ void dispatchReady(){
 	// WILL NOT BE SUSPENDED AND THAT ALL BLOKCED PROCESSES WILL BE SUSPENDED
 
 	// Check if there are no ready processes but there are blocked processes
-	if(GetNextReadyNotSuspended() == NULL && GetNextBlockedNotSuspended() != NULL){
+	if(GetNextReadyNotSuspended() == NULL && GetNextBlockedSuspended() != NULL){
 	    oldHead = GetNextBlockedSuspended();
 	}
 	//check if there are ready processes but no blocked processes
-	else if(GetNextReadyNotSuspended() != NULL && GetNextBlockedNotSuspended() == NULL){
+	else if(GetNextReadyNotSuspended() != NULL && GetNextBlockedSuspended() == NULL){
 	    oldHead = GetNextReadyNotSuspended();
 	}
 	// check if both are not empty
-	else if(GetNextReadyNotSuspended() != NULL && GetNextBlockedNotSuspended() != NULL){
+	else if(GetNextReadyNotSuspended() != NULL && GetNextBlockedSuspended() != NULL){
 	    // choose blocked or unblocked 50/50
 	    if(rand()%10 >= 5){
 		oldHead = GetNextReadyNotSuspended();

@@ -272,7 +272,7 @@ int RemovePCB(pcb* process){
         }
 	index = index->next_pcb;
     }
-    printf("\nERROR: Did not find process to be removed.");
+    //printf("\nERROR: Did not find process to be removed.");
     return 0;
 }
 
