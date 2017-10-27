@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "queue.h"
 #include "help.h"
 
@@ -68,7 +69,7 @@ int FreePCB(pcb* process) {
  * Three params: Process name, process class, and process priority
  * Returns pointer to pcb or null if an error occurs
  */
-pcb* SetupPCB(char* process_name, unsigned char process_class, int priority) {
+pcb* SetupPCB(char* process_name, int priority, char* file_name) {
     pcb* new_pcb = AllocatePCB();
 
     if(strlen(process_name)>8){
@@ -80,10 +81,11 @@ pcb* SetupPCB(char* process_name, unsigned char process_class, int priority) {
         return NULL;
     }
     strcpy(new_pcb->process_name, process_name);
-    new_pcb->process_class = process_class;
+    strcpy(new_pcb->file_name, file_name);
     new_pcb->priority = priority;
     new_pcb->running_state = READY;
     new_pcb->suspension_state = NOTSUSPENDED;
+    new_pcb->offset = 0;
     return new_pcb;
 }
 
@@ -150,13 +152,15 @@ void InsertPCB(pcb* process) {
             target_blocked_queue->tail->next_pcb = process;
             target_blocked_queue->tail = process;
             target_blocked_queue->count++;
+            printf("\nInserted %s into blocked queue.", process->process_name);
             return;
         }
         else {
             target_blocked_queue->head = process;
             target_blocked_queue->tail = process;
-	    process->next_pcb = NULL;
+	        process->next_pcb = NULL;
             target_blocked_queue->count++;
+            printf("\nInserted %s into blocked queue.", process->process_name);
             return;
         }
 
@@ -170,6 +174,7 @@ void InsertPCB(pcb* process) {
             target_ready_queue->tail = process;
             process -> next_pcb = NULL;
             target_ready_queue->count++;
+            printf("\nInserted %s into ready queue.", process->process_name);
             return;
         }
         /* If the queue isn't empty */
@@ -178,6 +183,7 @@ void InsertPCB(pcb* process) {
             process->next_pcb = target_ready_queue->head;
             target_ready_queue->head = process;
             target_ready_queue->count++;
+            printf("\nInserted %s into ready queue.", process->process_name);
             return;
         }
 
@@ -191,6 +197,7 @@ void InsertPCB(pcb* process) {
                 prev_temp_pcb->next_pcb = process;
                 process->next_pcb = temp_pcb;
                 target_ready_queue->count++;
+                printf("\nInserted %s into ready queue.", process->process_name);
                 return;
             }
         }
@@ -200,6 +207,7 @@ void InsertPCB(pcb* process) {
         target_ready_queue->tail = process;
         process->next_pcb = NULL;
         target_ready_queue->count++;
+        printf("\nInserted %s into ready queue.", process->process_name);
         return;
     }
 }
@@ -225,7 +233,7 @@ int RemovePCB(pcb* process){
         if(target_blocked_queue->tail == process) {
             target_blocked_queue->tail = NULL;
         }
-	return 1;
+	    return 1;
     }
     index = target_blocked_queue->head;
     while(index != NULL && index->next_pcb != NULL){
@@ -268,6 +276,41 @@ int RemovePCB(pcb* process){
     return 0;
 }
 
+/**
+ * R3
+ * Loading a Process
+ *  Creates a PCB
+ *  Sets up the PCB
+ *  Sets the priority of the PCB
+ *  Sets the data of the PCB (file path and offset)
+ *  Inserts the PCB into the queue
+ * Check that the process isn't already loaded, the priority is valid,
+ * and the file exists. Otherwise appropriate error message should be given.
+ */
+pcb* LoadProcess(char* process_name, int priority, char* file_name){
+    // pcb* SetupPCB(char* process_name, unsigned char process_class, int priority)
+
+    // Check that the process isn't already loaded
+
+    if (FindPCB(process_name) != NULL){
+        printf("\nError: Process %s already exists.", process_name);
+        return NULL;
+    }
+
+    if (priority < 0 || priority > 9){
+        printf("\nError: Priority out of range.");
+        return NULL;
+    }
+
+    if (access(file_name, F_OK) == -1){
+        printf("\nError: File does not exist.");
+        return NULL;
+    }
+
+    pcb* new_pcb = SetupPCB(process_name, priority, file_name);
+    InsertPCB(new_pcb);
+    return new_pcb;
+}
 
 void printQueue(struct queue *q){
     pcb* index = q -> head;
@@ -283,8 +326,8 @@ void printQueue(struct queue *q){
 
 void printPCB(pcb* process){
     printf(MAGENTACOLOR);
-    printf("\nrocess name: %s", process->process_name);
-    printf("\nProcess class: %c", process->process_class);
+    printf("\nProcess name: %s", process->process_name);
+    printf("\nProcess file: %s", process->file_name);
     printf("\nRunning state: %s", process->running_state == SUSPENDED ? "Not Suspended" : "Suspended");
     printf("\nPriority:  %d", process->priority);
     printf(DEFAULTCOLOR);
