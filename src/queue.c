@@ -72,11 +72,11 @@ pcb* SetupPCB(char* process_name, unsigned char process_class, int priority) {
     pcb* new_pcb = AllocatePCB();
 
     if(strlen(process_name)>8){
-        printf("ERROR: The name of this process is larger than 8 characters.\n");
+        printf("\nERROR: The name of this process is larger than 8 characters.");
         return NULL; 
     }
     if(priority > 9 || priority < 0){
-        printf("ERROR: The priority isn't between 0 and 9.\n");
+        printf("\nERROR: The priority isn't between 0 and 9.");
         return NULL;
     }
     strcpy(new_pcb->process_name, process_name);
@@ -136,7 +136,7 @@ pcb* FindPCB(char* name){
  */
 void InsertPCB(pcb* process) {
     if (FindPCB(process->process_name) != NULL) {
-        printf("ERROR: Process Exists! Process not added.");
+        printf("\nERROR: Process Exists! Process not added.");
         return;
     }
 
@@ -272,9 +272,9 @@ int RemovePCB(pcb* process){
 void printQueue(struct queue *q){
     pcb* index = q -> head;
     while(index != NULL) {
-        printf("-------------\n");
+        printf("\n-------------");
         printPCB(index);
-        printf("-------------\n");
+        printf("\n-------------");
         index = index->next_pcb;
     }
     printf("\n");
@@ -283,24 +283,24 @@ void printQueue(struct queue *q){
 
 void printPCB(pcb* process){
     printf(MAGENTACOLOR);
-    printf("Process name: %s\n", process->process_name);
-    printf("Process class: %c\n", process->process_class);
-    printf("Running state: %d\n", process->running_state == SUSPENDED ? "Suspended" : "Not Suspended");
-    printf("Priority:  %d\n\n", process->priority);
+    printf("\nrocess name: %s", process->process_name);
+    printf("\nProcess class: %c", process->process_class);
+    printf("\nRunning state: %s", process->running_state == SUSPENDED ? "Not Suspended" : "Suspended");
+    printf("\nPriority:  %d", process->priority);
     printf(DEFAULTCOLOR);
 }
 
 void printReadyProcesses(){
-    printf("Ready processes:\n");
+    printf("\nReady processes:");
     printQueue(&ready_queue);
-    printf("Suspended Ready Processes: \n");
+    printf("\nSuspended Ready Processes:");
     printQueue(&suspended_ready_queue);
 }
 
 void printBlockedProcesses(){
-    printf("Blocked processes:\n");
+    printf("\nBlocked processes:");
     printQueue(&blocked_queue);
-    printf("Suspended Blocked Processes:\n");
+    printf("\nSuspended Blocked Processes:");
     printQueue(&suspended_blocked_queue);
 }
 

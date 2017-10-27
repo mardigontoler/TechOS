@@ -39,57 +39,57 @@
     "\n " DISPATCHCOMMAND "\nBegins all processes that are ready.\n"
 
 #define SETDATEUSAGE "\nUsage for " SETDATECOMMAND	\
-    "\n" SETDATECOMMAND " -m <month> -d <day> -y <year>\n"
+    ":\n" SETDATECOMMAND " -m <month> -d <day> -y <year>\n"
 
 #define TIMEUSAGE "\nUsage for " TIMECOMMAND		\
-    "\n" TIMECOMMAND " (-t | -T | -S)\n\nExample:\ntime -T\n"
+    ":\n" TIMECOMMAND " (-t | -T | -S)\n\nExample:\ntime -T\n"
 
 #define TERMINATEUSAGE "\nUsage for " TERMINATECOMMAND			\
-    "\n" TERMINATECOMMAND "\nYou will be asked if you're sure you want to exit. "   	\
-    "Enter the letter \"y\" if you are sure."
+    ":\n" TERMINATECOMMAND "\nYou will be asked if you're sure you want to exit. "   	\
+    "Enter the letter \"y\" if you are sure.\n"
 
 #define DATEUSAGE "\nUsage for " SHOWDATECOMMAND		\
-    "\n" SHOWDATECOMMAND " (-d | -D | -f | -F | -g | -G | -m | -s | -y)"
+    ":\n" SHOWDATECOMMAND " (-d | -D | -f | -F | -g | -G | -m | -s | -y)\n"
 
 #define HELPUSAGE "\nUsage for " HELPCOMMAND		\
-    "\n" HELPCOMMAND " [-c <command>]\n\nExample:\nhelp -c time\n" 
+    ":\n" HELPCOMMAND " [-c <command>]\n\nExample:\nhelp -c time\n" 
 
-#define VERSIONUSAGE "\nUsage for " VERSIONCOMMAND "\n" VERSIONCOMMAND
+#define VERSIONUSAGE "\nUsage for " VERSIONCOMMAND ":\n" VERSIONCOMMAND
 
 #define SETPRIORITYUSAGE "\nUsage for " SETPRIORITYCOMMAND	\
-    "\n" SETPRIORITYCOMMAND " -n <name> -p <priority>"
+    ":\n" SETPRIORITYCOMMAND " -n <name> -p <priority>\n"
 
 #define SHOWPCBUSAGE "\nUsage for " SHOWPCBCOMMAND	\
-    "\n" SHOWPCBCOMMAND " -n <name>"
+    ":\n" SHOWPCBCOMMAND " -n <name>"
 
 #define SHOWPROCESSESUSAGE "\nUsage for " SHOWPROCESSESCOMMAND	\
-    "\n" SHOWPROCESSESCOMMAND
+    ":\n" SHOWPROCESSESCOMMAND
 
 #define SHOWREADYPROCESSESUSAGE "\nUsage for " SHOWREADYPROCESSESCOMMAND \
-    "\n" SHOWREADYPROCESSESCOMMAND
+    ":\n" SHOWREADYPROCESSESCOMMAND
 
 #define SHOWBLOCKEDPROCESSESUSAGE "\nUsage for " SHOWBLOCKEDPROCESSESCOMMAND \
-    "\n" SHOWBLOCKEDPROCESSESCOMMAND
+    ":\n" SHOWBLOCKEDPROCESSESCOMMAND
 
-#define CREATEPCBUSAGE "\nUsage for " CREATEPCBCOMMAND	\
-    "\n" CREATEPCBCOMMAND " -n <name> -p<priority> -c<class>\n" \
+#define CREATEPCBUSAGE "\nCreates a PCB\nUsage for " CREATEPCBCOMMAND	\
+    ":\n" CREATEPCBCOMMAND " -n <name> -p<priority> -c<class>\n" \
     " \nThe priority is a number from 0 to 9."							\
     "\nThere is no space between the -p and the priority or -c and the class.\n" 
 
 #define DELETEPCBUSAGE "\nUsage for " DELETEPCBCOMMAND	\
-    "\n" DELETEPCBCOMMAND " -n <name>\n"
+    ":\n" DELETEPCBCOMMAND " -n <name>"
 
 #define BLOCKPCBUSAGE "\nUsage for " BLOCKPCBCOMMAND	\
-    "\n" BLOCKPCBCOMMAND " -n <name>"
+    ":\n" BLOCKPCBCOMMAND " -n <name>"
 
 #define UNBLOCKPCBUSAGE "\nUsage for " UNBLOCKPCBCOMMAND	\
-    "\n" UNBLOCKPCBCOMMAND " -n <name>"
+    ":\n" UNBLOCKPCBCOMMAND " -n <name>"
 
-#define SUSPENDPCBUSAGE "\nUSage for " SUSPENDPCBCOMMAND	\
-    "\n" SUSPENDPCBCOMMAND " -n <name>"
+#define SUSPENDPCBUSAGE "\nUsage for " SUSPENDPCBCOMMAND	\
+    ":\n" SUSPENDPCBCOMMAND " -n <name>"
 
 #define RESUMEPCBUSAGE "\nUsage for " RESUMEPCBCOMMAND	\
-    "\n" RESUMEPCBCOMMAND " -n <name>"
+    ":\n" RESUMEPCBCOMMAND " -n <name>"
 
 int isValidCommand(char *);
 int matches(char *, char *);

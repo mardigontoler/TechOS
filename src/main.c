@@ -309,6 +309,8 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", DELETEPCBUSAGE);
 	}
     } 	
+
+    /* Block */
     else if(matches(command, BLOCKPCBCOMMAND)){
 	pcb* ptr;
 	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
@@ -320,6 +322,8 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", BLOCKPCBUSAGE);
 	}
     }
+
+    /* Unblock */
     else if(matches(command, UNBLOCKPCBCOMMAND)){
 	pcb* ptr;
 	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
@@ -331,17 +335,22 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", UNBLOCKPCBUSAGE);	    
 	}
     }
+
+    /* Suspend */
     else if(matches(command, SUSPENDPCBCOMMAND)){
-	pcb* ptr;
-	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	    RemovePCB(ptr);
-	    ptr->suspension_state = SUSPENDED;
-	    InsertPCB(ptr);
-	}
-	else{
-	    printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);	    
-	}	
+	   pcb* ptr;
+	   if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	       RemovePCB(ptr);
+	       ptr->suspension_state = SUSPENDED;
+	       InsertPCB(ptr);
+	   }
+	   else{
+	       printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
+           printf("\n%s\n", SUSPENDPCBUSAGE);	    
+	   }	
     }
+
+    /* Resume */
     else if(matches(command, RESUMEPCBCOMMAND)){
 	pcb* ptr;
 	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
@@ -350,7 +359,8 @@ int COMHAN(int numTokens, char **tokens)
 	    InsertPCB(ptr);
 	}
 	else{
-	    printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);	    
+	    printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
+        printf("\n%s\n", RESUMEPCBUSAGE);	    
 	}	
     }
     else if(matches(command, DISPATCHCOMMAND)){
