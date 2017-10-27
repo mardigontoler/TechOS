@@ -254,49 +254,49 @@ int COMHAN(int numTokens, char **tokens)
 	printBlockedProcesses();
     }
     
-    /* Create */
-    else if(matches(command, CREATEPCBCOMMAND)){
-	char name[MAXPROCESSNAMESIZE];
-	unsigned char class = 0;
-	int priority = 0;
-	int nameSet = 0, classSet = 0, prioritySet = 0;
-	//optind = 1;
-	while((c = getopt(numTokens, tokens, "n:c:p:")) != -1){
-	    switch(c){
-	    case 'n':
-		strcpy (name, optarg);
-		nameSet = 1;
-		break;
-	    case 'c':
-		class = optarg[0];
-		classSet = 1; // TODO validate correct process class entered
-		break;
-	    case 'p':
-		prioritySet = isValidInt(optarg);
-		if(prioritySet)priority = atoi(optarg); // only set priority var if valid
-		break;
-	    case '?':
-		printf("\nMissing argument.");
-		break;
-	    default:
-		valid -= 1;
-		break;		
-	    }
-	}
-	if(nameSet == 0 || prioritySet == 0 || classSet == 0)
-	    printf("\n%s\n", CREATEPCBUSAGE);
-	else{
-	    printf("\nCreating process %s with priority %d and class %c.", name, priority, class);
-	    pcb* ptr = SetupPCB(name, class, priority);
-	    if(ptr == NULL){
-		printf(REDCOLOR "\nERROR: Could not create the process. Exiting..." DEFAULTCOLOR);
-		exit(1);
-	    }
-	    else{
-		InsertPCB(ptr);
-	    }
-	}	    
-    }
+ //    /* Create */
+ //    else if(matches(command, CREATEPCBCOMMAND)){
+	// char name[MAXPROCESSNAMESIZE];
+	// unsigned char class = 0;
+	// int priority = 0;
+	// int nameSet = 0, classSet = 0, prioritySet = 0;
+	// //optind = 1;
+	// while((c = getopt(numTokens, tokens, "n:c:p:")) != -1){
+	//     switch(c){
+	//     case 'n':
+	// 	strcpy (name, optarg);
+	// 	nameSet = 1;
+	// 	break;
+	//     case 'c':
+	// 	class = optarg[0];
+	// 	classSet = 1; // TODO validate correct process class entered
+	// 	break;
+	//     case 'p':
+	// 	prioritySet = isValidInt(optarg);
+	// 	if(prioritySet)priority = atoi(optarg); // only set priority var if valid
+	// 	break;
+	//     case '?':
+	// 	printf("\nMissing argument.");
+	// 	break;
+	//     default:
+	// 	valid -= 1;
+	// 	break;		
+	//     }
+	// }
+	// if(nameSet == 0 || prioritySet == 0 || classSet == 0)
+	//     printf("\n%s\n", CREATEPCBUSAGE);
+	// else{
+	//     printf("\nCreating process %s with priority %d and class %c.", name, priority, class);
+	//     pcb* ptr = SetupPCB(name, class, priority);
+	//     if(ptr == NULL){
+	// 	printf(REDCOLOR "\nERROR: Could not create the process. Exiting..." DEFAULTCOLOR);
+	// 	exit(1);
+	//     }
+	//     else{
+	// 	InsertPCB(ptr);
+	//     }
+	// }	    
+ //    }
     
     /* Delete */
     else if(matches(command, DELETEPCBCOMMAND)){
@@ -310,63 +310,107 @@ int COMHAN(int numTokens, char **tokens)
 	}
     } 	
 
-    /* Block */
-    else if(matches(command, BLOCKPCBCOMMAND)){
-	pcb* ptr;
-	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	    RemovePCB(ptr);
-	    ptr->running_state = BLOCKED;
-	    InsertPCB(ptr); // will now get inserted into the other queue
-	}
-	else{
-	    printf("\n%s\n", BLOCKPCBUSAGE);
-	}
-    }
+ //    /* Block */
+ //    else if(matches(command, BLOCKPCBCOMMAND)){
+	// pcb* ptr;
+	// if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	//     RemovePCB(ptr);
+	//     ptr->running_state = BLOCKED;
+	//     InsertPCB(ptr); // will now get inserted into the other queue
+	// }
+	// else{
+	//     printf("\n%s\n", BLOCKPCBUSAGE);
+	// }
+ //    }
 
-    /* Unblock */
-    else if(matches(command, UNBLOCKPCBCOMMAND)){
-	pcb* ptr;
-	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	    RemovePCB(ptr);
-	    ptr->running_state = READY;
-	    InsertPCB(ptr); // will now get inserted into the other queue
-	}
-	else{
-	    printf("\n%s\n", UNBLOCKPCBUSAGE);	    
-	}
-    }
+ //     Unblock 
+ //    else if(matches(command, UNBLOCKPCBCOMMAND)){
+	// pcb* ptr;
+	// if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	//     RemovePCB(ptr);
+	//     ptr->running_state = READY;
+	//     InsertPCB(ptr); // will now get inserted into the other queue
+	// }
+	// else{
+	//     printf("\n%s\n", UNBLOCKPCBUSAGE);	    
+	// }
+ //    }
 
-    /* Suspend */
-    else if(matches(command, SUSPENDPCBCOMMAND)){
-	   pcb* ptr;
-	   if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	       RemovePCB(ptr);
-	       ptr->suspension_state = SUSPENDED;
-	       InsertPCB(ptr);
-	   }
-	   else{
-	       printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
-           printf("\n%s\n", SUSPENDPCBUSAGE);	    
-	   }	
-    }
+ //    /* Suspend */
+ //    else if(matches(command, SUSPENDPCBCOMMAND)){
+	//    pcb* ptr;
+	//    if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	//        RemovePCB(ptr);
+	//        ptr->suspension_state = SUSPENDED;
+	//        InsertPCB(ptr);
+	//    }
+	//    else{
+	//        printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
+ //           printf("\n%s\n", SUSPENDPCBUSAGE);	    
+	//    }	
+ //    }
 
-    /* Resume */
-    else if(matches(command, RESUMEPCBCOMMAND)){
-	pcb* ptr;
-	if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	    RemovePCB(ptr);
-	    ptr->suspension_state = NOTSUSPENDED;
-	    InsertPCB(ptr);
-	}
-	else{
-	    printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
-        printf("\n%s\n", RESUMEPCBUSAGE);	    
-	}	
-    }
+ //    /* Resume */
+ //    else if(matches(command, RESUMEPCBCOMMAND)){
+	// pcb* ptr;
+	// if((ptr = findFromArgName(numTokens, tokens)) != NULL){
+	//     RemovePCB(ptr);
+	//     ptr->suspension_state = NOTSUSPENDED;
+	//     InsertPCB(ptr);
+	// }
+	// else{
+	//     printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
+ //        printf("\n%s\n", RESUMEPCBUSAGE);	    
+	// }	
+ //    }
+
+    /* Dispatch */
     else if(matches(command, DISPATCHCOMMAND)){
 	dispatchReady();
     }
-    
+
+    /* Load */
+    else if(matches(command, LOADCOMMAND)){
+        char name[MAXPROCESSNAMESIZE];
+        char file_name[128];
+        unsigned char class = 0;
+        int priority = 0;
+        int nameSet = 0, filenameSet = 0, prioritySet = 0;
+        //optind = 1;
+        while((c = getopt(numTokens, tokens, "n:p:f:")) != -1){
+            switch(c){
+            case 'n':
+                strcpy (name, optarg);
+                nameSet = 1;
+                break;
+            case 'p':
+                prioritySet = isValidInt(optarg);
+                if(prioritySet)priority = atoi(optarg);
+                break;
+            case 'f':
+                strcpy(file_name, optarg);
+                filenameSet = 1;
+                break;
+            case '?':
+                printf("\nMissing argument.");
+                break;
+            default:
+                valid -= 1;
+                break;          
+            }
+        }
+        if(nameSet == 0 || prioritySet == 0 || filenameSet == 0){
+            printf("\nname:%s", name);
+            printf("\npriority:%d", priority);
+            printf("\nfilename:%s", file_name);
+            printf("\n%s\n", LOADUSAGE);
+        }
+        else{
+            printf("\nCreating process %s with priority %d from file %s", name, priority, file_name);
+            pcb* ptr = LoadProcess(name, priority, file_name);
+        }           
+    }
+
     return RUN;
 }
 
@@ -387,33 +431,36 @@ void dispatchReady(){
 	RemovePCB(oldHead);
 	oldHead->running_state = RUNNING;
 	oldHead->suspension_state = NOTSUSPENDED;
+        InsertPCB(oldHead);
 	char systemArgument[100];
-	char* executeCommand = "./execute ";
-	char* offsetString = atoi(oldHead->offset + 1); // add 1 to offset before changing to string
+	char* executeCommand = "./execute.exe ";
+        
+        sprintf(systemArgument, "%s %s %d", executeCommand, oldHead->file_name, oldHead->offset+1);
 	//system("./execute " oldHead->path offsetString);
 	// need to copy info into systemArgument and use that to cal system()
-	strcat(systemArgument, executeCommand);
-	strcat(systemArgument, oldHead->processFile);
-	strcat(systemArgument, offseString);
+
+	// strcat(systemArgument, executeCommand);
+	// strcat(systemArgument, oldHead->file_name);
+	// strcat(systemArgument, offsetString);
 
 	// run the 'execute' binary with the PPCB's offset + 1
 	// the return value will indicate whether there was an interrupt.
 	// 0 indicates that the process is finished and should be removed
 	// Otherwise there was an interrupt. The interrupt value should be divided by 256
-	// and stored as the offset of the process's PCB
+	// and stored as the offset of the process's PCBdispa
 	printf("\nDEBUG systemArgument %s\n",systemArgument);
 	int interrupt = system(systemArgument);
-
+        printf("\n%d", interrupt);
 	if(interrupt == 0){
 	    FreePCB(oldHead);
 	}
-	else{
-	    // there was an interrupt
+	else{	    // there was an interrupt
 	    // block and suspend
 	    oldHead->offset = interrupt/256;
+            printf("\nRemoving %s", oldHead->process_name);
 	    RemovePCB(oldHead);
 	    oldHead->suspension_state = SUSPENDED;
-	    oldHead->running_status = BLOCKED;
+	    oldHead->running_state = BLOCKED;
 	    InsertPCB(oldHead);
 	}
 	// we need to choose the next process to dispatch.
@@ -426,15 +473,15 @@ void dispatchReady(){
 	// WILL NOT BE SUSPENDED AND THAT ALL BLOKCED PROCESSES WILL BE SUSPENDED
 
 	// Check if there are no ready processes but there are blocked processes
-	if(GetNextReady() == NULL && GetNextBlockedSuspended() != NULL){
+	if(GetNextReadyNotSuspended() == NULL && GetNextBlockedNotSuspended() != NULL){
 	    oldHead = GetNextBlockedSuspended();
 	}
 	//check if there are ready processes but no blocked processes
-	else if(GetNextReady() != NULL && GetNextBlocked() == NULL){
+	else if(GetNextReadyNotSuspended() != NULL && GetNextBlockedNotSuspended() == NULL){
 	    oldHead = GetNextReadyNotSuspended();
 	}
 	// check if both are not empty
-	else if(GetNextReady() != NULL && GetNextBlocked() != NULL){
+	else if(GetNextReadyNotSuspended() != NULL && GetNextBlockedNotSuspended() != NULL){
 	    // choose blocked or unblocked 50/50
 	    if(rand()%10 >= 5){
 		oldHead = GetNextReadyNotSuspended();

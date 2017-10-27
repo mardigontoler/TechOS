@@ -3,8 +3,8 @@
 
 #include "queue.h"
 
-#define COMPLETIONDATE "10/2/2017"
-#define VERSION "2.0"
+#define COMPLETIONDATE "10/27/2017"
+#define VERSION "3.0"
 
 #define BLUECOLOR "\e[34m"
 #define YELLOWCOLOR "\e[93m"
@@ -12,7 +12,7 @@
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
-#define NUMCOMMANDS (18)
+#define NUMCOMMANDS (13)
 #define MAXPROCESSNAMESIZE (8)
 
 #define HELPCOMMAND "help"
@@ -34,6 +34,8 @@
 #define SUSPENDPCBCOMMAND "suspend"
 #define RESUMEPCBCOMMAND "resume"
 #define DISPATCHCOMMAND "dispatch"
+// R3 commands
+#define LOADCOMMAND "load"
 
 #define DISPATCHUSAGE "\nUsage for " DISPATCHCOMMAND	\
     "\n " DISPATCHCOMMAND "\nBegins all processes that are ready.\n"
@@ -90,6 +92,9 @@
 
 #define RESUMEPCBUSAGE "\nUsage for " RESUMEPCBCOMMAND	\
     ":\n" RESUMEPCBCOMMAND " -n <name>"
+
+#define LOADUSAGE "\nUsage for " LOADCOMMAND  \
+    ":\n" LOADCOMMAND " -n <process_name> -p <priority> -f <filename>"
 
 int isValidCommand(char *);
 int matches(char *, char *);

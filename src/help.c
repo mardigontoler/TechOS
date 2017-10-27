@@ -19,13 +19,16 @@ char *validCommands[NUMCOMMANDS] = {
     SHOWPROCESSESCOMMAND,
     SHOWREADYPROCESSESCOMMAND,
     SHOWBLOCKEDPROCESSESCOMMAND,
-    CREATEPCBCOMMAND,
-    DELETEPCBCOMMAND,
-    BLOCKPCBCOMMAND,
-    UNBLOCKPCBCOMMAND,
-    SUSPENDPCBCOMMAND,
-    RESUMEPCBCOMMAND,
-    DISPATCHCOMMAND
+    //CREATEPCBCOMMAND,
+    //DELETEPCBCOMMAND,
+    //BLOCKPCBCOMMAND,
+    //UNBLOCKPCBCOMMAND,
+    //SUSPENDPCBCOMMAND,
+    //RESUMEPCBCOMMAND,
+    DISPATCHCOMMAND,
+
+    // R3
+    LOADCOMMAND
 };
 
 
@@ -70,7 +73,7 @@ void help(char *command, int showAll){
     if(showAll){
 	printf("\nTechOS provides you with the following commands:\n");
 	for(int i = 0; i < NUMCOMMANDS; i++){
-	    char *b = (i % 2 == 0) ? "\t\t" : "\n"; // alternate tabs and newlines
+	    char *b = (i % 2 == 0) ? "\n" : "\t\t\t"; // alternate tabs and newlines
 	    printf("%s%s", b, validCommands[i]);
 	}
 	printf("\n\nThe help command can tell you how to use the other commands!");
@@ -90,10 +93,11 @@ void help(char *command, int showAll){
 	if(matches(SHOWPROCESSESCOMMAND,        command))printf(SHOWPROCESSESUSAGE);
 	if(matches(SHOWREADYPROCESSESCOMMAND,   command))printf(SHOWREADYPROCESSESUSAGE);
 	if(matches(SHOWBLOCKEDPROCESSESCOMMAND, command))printf(SHOWBLOCKEDPROCESSESUSAGE);
-	if(matches(CREATEPCBCOMMAND,            command))printf(CREATEPCBUSAGE);
-	if(matches(DELETEPCBCOMMAND,            command))printf(DELETEPCBUSAGE);
-	if(matches(BLOCKPCBCOMMAND,             command))printf(BLOCKPCBUSAGE);
-	if(matches(UNBLOCKPCBCOMMAND,           command))printf(UNBLOCKPCBUSAGE);
+	//if(matches(CREATEPCBCOMMAND,            command))printf(CREATEPCBUSAGE);
+	//if(matches(DELETEPCBCOMMAND,            command))printf(DELETEPCBUSAGE);
+	//if(matches(BLOCKPCBCOMMAND,             command))printf(BLOCKPCBUSAGE);
+	//if(matches(UNBLOCKPCBCOMMAND,           command))printf(UNBLOCKPCBUSAGE);
+    if(matches(LOADCOMMAND,                 command))printf(LOADUSAGE);
 	if(matches(DISPATCHCOMMAND,             command))printf(DISPATCHUSAGE);
     }
     printf(DEFAULTCOLOR);
