@@ -400,13 +400,13 @@ int COMHAN(int numTokens, char **tokens)
             }
         }
         if(nameSet == 0 || prioritySet == 0 || filenameSet == 0){
-            printf("\nname:%s", name);
-            printf("\npriority:%d", priority);
-            printf("\nfilename:%s", file_name);
-            printf("\n%s\n", LOADUSAGE);
+            //printf("\nname:%s", name);
+            //printf("\npriority:%d", priority);
+            //printf("\nfilename:%s", file_name);
+            //printf("\n%s\n", LOADUSAGE);
         }
         else{
-            printf("\nCreating process %s with priority %d from file %s", name, priority, file_name);
+            //printf("\nCreating process %s with priority %d from file %s", name, priority, file_name);
             pcb* ptr = LoadProcess(name, priority, file_name);
         }           
     }
@@ -450,14 +450,15 @@ void dispatchReady(){
 	// and stored as the offset of the process's PCBdispa
 	//printf("\nDEBUG systemArgument %s\n",systemArgument);
 	int interrupt = system(systemArgument);
-        printf("\n%d", interrupt);
+        //printf("\n%d", interrupt);
 	if(interrupt == 0){
+        printf("\n[%d] Process %s is completed.", interrupt, oldHead->process_name);
 	    FreePCB(oldHead);
 	}
 	else{	    // there was an interrupt
 	    // block and suspend
 	    oldHead->offset = interrupt/256;
-            printf("\nRemoving %s", oldHead->process_name);
+        printf("\n[%d] Suspending %s.",interrupt, oldHead->process_name);
 	    RemovePCB(oldHead);
 	    oldHead->suspension_state = SUSPENDED;
 	    oldHead->running_state = BLOCKED;

@@ -152,7 +152,7 @@ void InsertPCB(pcb* process) {
             target_blocked_queue->tail->next_pcb = process;
             target_blocked_queue->tail = process;
             target_blocked_queue->count++;
-            printf("\nInserted %s into blocked queue.", process->process_name);
+            //printf("\nInserted %s into blocked queue.", process->process_name);
             return;
         }
         else {
@@ -160,7 +160,7 @@ void InsertPCB(pcb* process) {
             target_blocked_queue->tail = process;
 	        process->next_pcb = NULL;
             target_blocked_queue->count++;
-            printf("\nInserted %s into blocked queue.", process->process_name);
+            //printf("\nInserted %s into blocked queue.", process->process_name);
             return;
         }
 
@@ -174,7 +174,7 @@ void InsertPCB(pcb* process) {
             target_ready_queue->tail = process;
             process -> next_pcb = NULL;
             target_ready_queue->count++;
-            printf("\nInserted %s into ready queue.", process->process_name);
+            //printf("\nInserted %s into ready queue.", process->process_name);
             return;
         }
         /* If the queue isn't empty */
@@ -183,7 +183,7 @@ void InsertPCB(pcb* process) {
             process->next_pcb = target_ready_queue->head;
             target_ready_queue->head = process;
             target_ready_queue->count++;
-            printf("\nInserted %s into ready queue.", process->process_name);
+            //printf("\nInserted %s into ready queue.", process->process_name);
             return;
         }
 
@@ -197,7 +197,7 @@ void InsertPCB(pcb* process) {
                 prev_temp_pcb->next_pcb = process;
                 process->next_pcb = temp_pcb;
                 target_ready_queue->count++;
-                printf("\nInserted %s into ready queue.", process->process_name);
+                //printf("\nInserted %s into ready queue.", process->process_name);
                 return;
             }
         }
@@ -207,7 +207,7 @@ void InsertPCB(pcb* process) {
         target_ready_queue->tail = process;
         process->next_pcb = NULL;
         target_ready_queue->count++;
-        printf("\nInserted %s into ready queue.", process->process_name);
+        //printf("\nInserted %s into ready queue.", process->process_name);
         return;
     }
 }
