@@ -10,6 +10,10 @@
 #include "help.h"
 #include "queue.h"
 
+// Windows definitions
+#define
+// Linux definitions
+
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
 #define RUN (1) // not a command, controls main loop
@@ -38,8 +42,8 @@ int main(int argc, char **argv)
     // set up queues
     initQueues();    
     
-    InitDate(); // sets date to today's date
-    
+    InitDate(); // sets date to today's datedir
+
     while(running){
     	printf("\n" BLUECOLOR "TechOS >" DEFAULTCOLOR);
     	numTokens = 0;
@@ -433,7 +437,7 @@ void dispatchReady(){
 	oldHead->suspension_state = NOTSUSPENDED;
         //InsertPCB(oldHead);
 	char systemArgument[100];
-	char* executeCommand = "./execute ";
+	char* executeCommand = "./execute.exe";
         
         sprintf(systemArgument, "%s %s %d", executeCommand, oldHead->file_name, oldHead->offset+1);
 	//system("./execute " oldHead->path offsetString);
