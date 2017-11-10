@@ -28,7 +28,15 @@ char *validCommands[NUMCOMMANDS] = {
     DISPATCHCOMMAND,
 
     // R3
-    LOADCOMMAND
+    LOADCOMMAND,
+
+    //R4
+    VIEWDIRCOMMAND,
+    CHANGEDIRCOMMAND,
+    CREATEFOLDERCOMMAND,
+    REMOVEFOLDERCOMMAND,
+    REMOVEFILECOMMAND,
+    CREATEFILECOMMAND
 };
 
 
@@ -97,6 +105,12 @@ void help(char *command, int showAll){
 	//if(matches(DELETEPCBCOMMAND,            command))printf(DELETEPCBUSAGE);
 	//if(matches(BLOCKPCBCOMMAND,             command))printf(BLOCKPCBUSAGE);
 	//if(matches(UNBLOCKPCBCOMMAND,           command))printf(UNBLOCKPCBUSAGE);
+	if(matches(VIEWDIRCOMMAND,              command))printf(VIEWDIRUSAGE);
+	if(matches(CHANGEDIRCOMMAND,            command))printf(CHANGEDIRUSAGE);
+	if(matches(CREATEFOLDERCOMMAND,         command))printf(CREATEFOLDERUSAGE);
+	if(matches(REMOVEFOLDERCOMMAND,         command))printf(REMOVEFOLDERUSAGE);
+	if(matches(CREATEFILECOMMAND,           command))printf(CREATEFILEUSAGE);
+	if(matches(REMOVEFILECOMMAND,           command))printf(REMOVEFILEUSAGE);
     if(matches(LOADCOMMAND,                 command))printf(LOADUSAGE);
 	if(matches(DISPATCHCOMMAND,             command))printf(DISPATCHUSAGE);
     }
