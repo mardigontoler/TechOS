@@ -414,7 +414,6 @@ int COMHAN(int numTokens, char **tokens)
     }
     else if(matches(command, VIEWDIRCOMMAND)){
 	char name[1000];
-	int nameSet = 0;
 	int showSizes = 0;
 	while((c = getopt(numTokens, tokens, "n:s")) != -1){
 	    switch(c){
@@ -429,8 +428,9 @@ int COMHAN(int numTokens, char **tokens)
 	    }
 	    
 	}
+	name = getName(name, 999);
 	// show sizes will be set to 1 if they specified that option
-	if(nameSet != 1){
+	if( // check if name is empty){
 	    // show current path
 	}
 	else{
