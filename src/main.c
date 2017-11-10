@@ -72,27 +72,8 @@ int main(int argc, char **argv)
 }
 
 
-char* findName(int numTokens, char **tokens){
-    optind = 1; // help out getopt function
-    int c;
-    char *name;
-    int valid = 0;
-    while((c = getopt(numTokens, tokens, "n:")) != -1){
-    	switch(c){
-	case 'n':
-	    name = optarg;
-	    valid = 1;
-	    break;
-	default:;
-    	}
-    	if(valid){
-	    return name;
-    	}
-	else{
-	    printf(REDCOLOR "ERROR: You must specify a name.\n");
-	}
-    }
-    return NULL;    
+char* getName(char *namePtr, int length){
+    fgets(namePtr, length, stdin);
 }
 
 /**
@@ -446,6 +427,7 @@ int COMHAN(int numTokens, char **tokens)
 	    default:
 		break;
 	    }
+	    
 	}
 	// show sizes will be set to 1 if they specified that option
 	if(nameSet != 1){
@@ -456,24 +438,31 @@ int COMHAN(int numTokens, char **tokens)
 	}
     }
     else if(matches(command, CHANGEDIRCOMMAND)){
-	char *name = findName(numTokens, tokens);
+	char name[1000];
+	getName(name,999);
 	// change directory to path stored in name
 	// NULL if they didnt enter a name correctly
+	printf("%s\n", name);
     }
     else if(matches(command, CREATEFOLDERCOMMAND)){
-	char *name = findName(numTokens, tokens);
-	//create the folder. Name stored in name, NULL if they didnt enter correctly
+	char name[1000];
+	getName(name,999);
+		//create the folder. Name stored in name, NULL if they didnt enter correctly
     }
     else if(matches(command, REMOVEFOLDERCOMMAND)){
-	char *name = findName(numTokens, tokens);
+	char name[1000];
+	getName(name,999);
+	
 	// remove folder "name"
     }
-    else if(matches(command, CREATEFILECOMMAND)){
-	char *name = findName(numTokens, tokens);
+    else if(matches(command, CREATEFILECOMMAND)){	
+	char name[1000];
+	getName(name,999);
 	// create file "name"
     }
     else if(matches(command, REMOVEFILECOMMAND)){
-	char *name = findName(numTokens, tokens);
+	char name[1000];
+	getName(name,999);
 	// remove file "name"
     }
 
