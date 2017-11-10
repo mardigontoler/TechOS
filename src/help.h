@@ -12,7 +12,7 @@
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
-#define NUMCOMMANDS (13)
+#define NUMCOMMANDS (19)
 #define MAXPROCESSNAMESIZE (8)
 
 #define HELPCOMMAND "help"
@@ -36,6 +36,13 @@
 #define DISPATCHCOMMAND "dispatch"
 // R3 commands
 #define LOADCOMMAND "load"
+// R4 commands
+#define VIEWDIRCOMMAND "ls"
+#define CHANGEDIRCOMMAND "cd"
+#define CREATEFOLDERCOMMAND "mkdir"
+#define REMOVEFOLDERCOMMAND "rmdir"
+#define CREATEFILECOMMAND "mkfile"
+#define REMOVEFILECOMMAND "rmfile"
 
 #define DISPATCHUSAGE "\nUsage for " DISPATCHCOMMAND	\
     "\n " DISPATCHCOMMAND "\nBegins all processes that are ready.\n"
@@ -95,6 +102,31 @@
 
 #define LOADUSAGE "\nUsage for " LOADCOMMAND  \
     ":\n" LOADCOMMAND " -n <process_name> -p <priority> -f <filename>"
+
+#define VIEWDIRUSAGE "\nUsage for " VIEWDIRCOMMAND	\
+    ":\n " VIEWDIRCOMMAND " (-p <path>) (-s) "		\
+    "\nIf you specify -p it must be followed by the path you wish to view." \
+    "\nSpecifying -s will show the sizes of files.\n"
+
+#define CHANGEDIRUSAGE "\nUsage for " CHANGEDIRCOMMAND	\
+    ":\n " CHANGEDIRCOMMAND " -p <path> \n"
+
+#define CREATEFOLDERUSAGE "\nUsage for " CREATEFOLDERCOMMAND	\
+    ":\n " CREATEFOLDERCOMMAND " -n <name> \n"			\
+    "Creates a folder in the current directory with name <name>.\n"
+
+#define REMOVEFOLDERUSAGE "\nUsage for " REMOVEFOLDERCOMMAND	\
+    ":\n " REMOVEFOLDERCOMMAND " -n <name> \n"			\
+    "Removes a folder in the current directory with name <name>.\n"
+
+#define CREATEFILEUSAGE "\nUsage for " CREATEFILECOMMAND	\
+    ":\n " CREATEFILECOMMAND " -n <name>"			\
+    "\nCreates a file in the current directory with name <name>.\n"
+
+#define REMOVEFILEUSAGE "\nUsage for " REMOVEFILECOMMAND	\
+    ":\n " REMOVEFILECOMMAND " -n <name>"				\
+    "\nRemoves a file in the current directory with name <name>.\n"
+
 
 int isValidCommand(char *);
 int matches(char *, char *);

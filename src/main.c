@@ -72,7 +72,28 @@ int main(int argc, char **argv)
 }
 
 
-
+char* findName(int numTokens, char **tokens){
+    optind = 1; // help out getopt function
+    int c;
+    char *name;
+    int valid = 0;
+    while((c = getopt(numTokens, tokens, "n:")) != -1){
+    	switch(c){
+	case 'n':
+	    name = optarg;
+	    valid = 1;
+	    break;
+	default:;
+    	}
+    	if(valid){
+	    return name;
+    	}
+	else{
+	    printf(REDCOLOR "ERROR: You must specify a name.\n");
+	}
+    }
+    return NULL;    
+}
 
 /**
    Gets pointer to the pcb from the command arguments
@@ -409,6 +430,51 @@ int COMHAN(int numTokens, char **tokens)
             //printf("\nCreating process %s with priority %d from file %s", name, priority, file_name);
             pcb* ptr = LoadProcess(name, priority, file_name);
         }           
+    }
+    else if(matches(command, VIEWDIRCOMMAND)){
+	char name[1000];
+	int nameSet = 0;
+	int showSizes = 0;
+	while((c = getopt(numTokens, tokens, "n:s")) != -1){
+	    switch(c){
+	    case 'n':
+		strncpy(name, optarg, 999);
+		nameSet = 1;
+		break;
+	    case 's':
+		showSizes = 1;
+	    default:
+		break;
+	    }
+	}
+	// show sizes will be set to 1 if they specified that option
+	if(nameSet != 1){
+	    // show current path
+	}
+	else{
+	    // show path with directory stored in name
+	}
+    }
+    else if(matches(command, CHANGEDIRCOMMAND)){
+	char *name = findName(numTokens, tokens);
+	// change directory to path stored in name
+	// NULL if they didnt enter a name correctly
+    }
+    else if(matches(command, CREATEFOLDERCOMMAND)){
+	char *name = findName(numTokens, tokens);
+	//create the folder. Name stored in name, NULL if they didnt enter correctly
+    }
+    else if(matches(command, REMOVEFOLDERCOMMAND)){
+	char *name = findName(numTokens, tokens);
+	// remove folder "name"
+    }
+    else if(matches(command, CREATEFILECOMMAND)){
+	char *name = findName(numTokens, tokens);
+	// create file "name"
+    }
+    else if(matches(command, REMOVEFILECOMMAND)){
+	char *name = findName(numTokens, tokens);
+	// remove file "name"
     }
 
     return RUN;
