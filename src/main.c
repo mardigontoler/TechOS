@@ -9,9 +9,10 @@
 #include "datetime.h"
 #include "help.h"
 #include "queue.h"
+#include "lang.h"
 
 // Windows definitions
-#define
+#define;
 // Linux definitions
 
 #define MAXTOKENS (25)

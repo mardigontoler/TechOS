@@ -31,11 +31,11 @@ int main(int argc, char **argv)
 	localtime (&t);
 	srand(t);
 
-	initQueue();
+	initQueues();
 	InitDate();
 
 	while (running){
-		pritnf("\n" BLUECOLOR "TechOS >" DEFAULTCOLOR);
+		printf("\n" BLUECOLOR "TechOS >" DEFAULTCOLOR);
 		numTokens = 0;
 		if (fgets(input, MAXINPUTSIZE - MAXTOKENS - 1, stdin) != NULL) {
 			// convert input into tokens for parsing options
