@@ -10,11 +10,20 @@
 #include "help.h"
 #include "queue.h"
 
+// Windows definitions
+// Linux definitions
+
 #define MAXTOKENS (25)
 #define MAXINPUTSIZE (300)
 #define RUN (1) // not a command, controls main loop
 #define STOP (0)
 
+#define SYSTEM_VIEWDIR "ls"
+#define SYSTEM_CHANGEDIR "cd"
+#define SYSTEM_MAKEDIR "mkdir"
+#define SYSTEM_REMOVE "rm"
+#define SYSTEM_TOUCH "touch"
+#define DIR_MAIN "TOS"
 
 // prototypes
 int COMHAN(int, char**);
@@ -38,8 +47,12 @@ int main(int argc, char **argv)
     // set up queues
     initQueues();    
     
-    InitDate(); // sets date to today's date
-    
+    InitDate(); // sets date to today's datedir
+
+    // DEBUG for ls
+    chdir(DIR_MAIN);
+
+
     while(running){
     	printf("\n" BLUECOLOR "TechOS >" DEFAULTCOLOR);
     	numTokens = 0;
@@ -71,10 +84,42 @@ int main(int argc, char **argv)
     return 0;
 }
 
+// char* getName(char *namePtr, int length) {
+//         fgets(namePtr, length, stdin);
+// }
 
+<<<<<<< HEAD
+char* findName(int numTokens, char **tokens){
+    optind = 1; // help out getopt function
+    int c;
+    char *name;
+    int valid = 0;
+    while((c = getopt(numTokens, tokens, "n:")) != -1){
+        switch(c){
+    case 'n':
+        name = optarg;
+        valid = 1;
+        break;
+    default:;
+        }
+        if(valid){
+        return name;
+        }
+    else{
+        printf(REDCOLOR "ERROR: You must specify a name.\n");
+    }
+    }
+    return NULL;    
+=======
 char* getName(char *namePtr, int length){
     fgets(namePtr, length, stdin);
+>>>>>>> 00a4672f3b74530af30d13b7d878c80927a3fc60
 }
+
+
+// char* getName(char *namePtr, int length) {
+//     return fgets(namePtr, length, stdin);
+// }
 
 /**
    Gets pointer to the pcb from the command arguments
@@ -256,49 +301,6 @@ int COMHAN(int numTokens, char **tokens)
 	printBlockedProcesses();
     }
     
- //    /* Create */
- //    else if(matches(command, CREATEPCBCOMMAND)){
-	// char name[MAXPROCESSNAMESIZE];
-	// unsigned char class = 0;
-	// int priority = 0;
-	// int nameSet = 0, classSet = 0, prioritySet = 0;
-	// //optind = 1;
-	// while((c = getopt(numTokens, tokens, "n:c:p:")) != -1){
-	//     switch(c){
-	//     case 'n':
-	// 	strcpy (name, optarg);
-	// 	nameSet = 1;
-	// 	break;
-	//     case 'c':
-	// 	class = optarg[0];
-	// 	classSet = 1; // TODO validate correct process class entered
-	// 	break;
-	//     case 'p':
-	// 	prioritySet = isValidInt(optarg);
-	// 	if(prioritySet)priority = atoi(optarg); // only set priority var if valid
-	// 	break;
-	//     case '?':
-	// 	printf("\nMissing argument.");
-	// 	break;
-	//     default:
-	// 	valid -= 1;
-	// 	break;		
-	//     }
-	// }
-	// if(nameSet == 0 || prioritySet == 0 || classSet == 0)
-	//     printf("\n%s\n", CREATEPCBUSAGE);
-	// else{
-	//     printf("\nCreating process %s with priority %d and class %c.", name, priority, class);
-	//     pcb* ptr = SetupPCB(name, class, priority);
-	//     if(ptr == NULL){
-	// 	printf(REDCOLOR "\nERROR: Could not create the process. Exiting..." DEFAULTCOLOR);
-	// 	exit(1);
-	//     }
-	//     else{
-	// 	InsertPCB(ptr);
-	//     }
-	// }	    
- //    }
     
     /* Delete */
     else if(matches(command, DELETEPCBCOMMAND)){
@@ -311,60 +313,6 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", DELETEPCBUSAGE);
 	}
     } 	
-
- //    /* Block */
- //    else if(matches(command, BLOCKPCBCOMMAND)){
-	// pcb* ptr;
-	// if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	//     RemovePCB(ptr);
-	//     ptr->running_state = BLOCKED;
-	//     InsertPCB(ptr); // will now get inserted into the other queue
-	// }
-	// else{
-	//     printf("\n%s\n", BLOCKPCBUSAGE);
-	// }
- //    }
-
- //     Unblock 
- //    else if(matches(command, UNBLOCKPCBCOMMAND)){
-	// pcb* ptr;
-	// if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	//     RemovePCB(ptr);
-	//     ptr->running_state = READY;
-	//     InsertPCB(ptr); // will now get inserted into the other queue
-	// }
-	// else{
-	//     printf("\n%s\n", UNBLOCKPCBUSAGE);	    
-	// }
- //    }
-
- //    /* Suspend */
- //    else if(matches(command, SUSPENDPCBCOMMAND)){
-	//    pcb* ptr;
-	//    if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	//        RemovePCB(ptr);
-	//        ptr->suspension_state = SUSPENDED;
-	//        InsertPCB(ptr);
-	//    }
-	//    else{
-	//        printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
- //           printf("\n%s\n", SUSPENDPCBUSAGE);	    
-	//    }	
- //    }
-
- //    /* Resume */
- //    else if(matches(command, RESUMEPCBCOMMAND)){
-	// pcb* ptr;
-	// if((ptr = findFromArgName(numTokens, tokens)) != NULL){
-	//     RemovePCB(ptr);
-	//     ptr->suspension_state = NOTSUSPENDED;
-	//     InsertPCB(ptr);
-	// }
-	// else{
-	//     printf(REDCOLOR "ERROR: Could not find a process with that name.\n" DEFAULTCOLOR);
- //        printf("\n%s\n", RESUMEPCBUSAGE);	    
-	// }	
- //    }
 
     /* Dispatch */
     else if(matches(command, DISPATCHCOMMAND)){
@@ -412,58 +360,81 @@ int COMHAN(int numTokens, char **tokens)
             pcb* ptr = LoadProcess(name, priority, file_name);
         }           
     }
+
+    /* ls */
     else if(matches(command, VIEWDIRCOMMAND)){
-	char name[1000];
-	int showSizes = 0;
-	while((c = getopt(numTokens, tokens, "n:s")) != -1){
-	    switch(c){
-	    case 'n':
-		strncpy(name, optarg, 999);
-		nameSet = 1;
-		break;
-	    case 's':
-		showSizes = 1;
-	    default:
-		break;
-	    }
-	    
-	}
-	name = getName(name, 999);
-	// show sizes will be set to 1 if they specified that option
-	if( // check if name is empty){
-	    // show current path
-	}
-	else{
-	    // show path with directory stored in name
-	}
+        char name[1000];
+        strcpy(name, ""); // clears the name buffer each time
+        //int nameSet = 0;
+        int showSizes = 0;
+        char sysArgs[1000];
+        while((c = getopt(numTokens, tokens, "n:s")) != -1){
+            switch(c){
+            case 'n':
+                strncpy(name, optarg, 999);
+                //nameSet = 1;
+                break;
+            case 's':
+                showSizes = 1;
+            default:
+                break;
+            }
+        }
+        // show sizes will be set to 1 if they specified that option
+        //strcpy(name, getName(name, 999));
+        if(showSizes == 1)
+            sprintf(sysArgs, SYSTEM_VIEWDIR " %s -s", name);
+        else
+            sprintf(sysArgs, SYSTEM_VIEWDIR " %s", name);
+        system(sysArgs);
     }
+
+    /* cd */
     else if(matches(command, CHANGEDIRCOMMAND)){
-	char name[1000];
-	getName(name,999);
-	// change directory to path stored in name
-	// NULL if they didnt enter a name correctly
-	printf("%s\n", name);
+        char *name = findName(numTokens, tokens);
+
+        if(name != NULL && chdir(name)){
+            printf("\nERROR: Could not find directory %s.", name);
+            strcpy(name, "");
+        }
+        // change directory to path stored in name
+        // NULL if they didnt enter a name correctly
     }
+
+    /* mkdir */
     else if(matches(command, CREATEFOLDERCOMMAND)){
-	char name[1000];
-	getName(name,999);
-		//create the folder. Name stored in name, NULL if they didnt enter correctly
+        char *name = findName(numTokens, tokens);
+        char sysArgs[1000];
+        sprintf(sysArgs, SYSTEM_MAKEDIR " %s", name);
+        system(sysArgs);
+    //create the folder. Name stored in name, NULL if they didnt enter correctly
     }
+
+    /* rmdir */
     else if(matches(command, REMOVEFOLDERCOMMAND)){
-	char name[1000];
-	getName(name,999);
-	
-	// remove folder "name"
+        char *name = findName(numTokens, tokens);
+        char sysArgs[1000];
+        sprintf(sysArgs, SYSTEM_REMOVE " -r %s", name);
+        system(sysArgs);
+    // remove folder "name"
     }
-    else if(matches(command, CREATEFILECOMMAND)){	
-	char name[1000];
-	getName(name,999);
-	// create file "name"
+
+    /* mkfile */
+    else if(matches(command, CREATEFILECOMMAND)){
+        char *name = findName(numTokens, tokens);
+        char sysArgs[1000];
+        sprintf(sysArgs, SYSTEM_TOUCH " %s", name);
+        system(sysArgs);
+    // create file "name"
     }
+
+    /* rm file */
     else if(matches(command, REMOVEFILECOMMAND)){
-	char name[1000];
-	getName(name,999);
-	// remove file "name"
+        char *name = findName(numTokens, tokens);
+        char sysArgs[1000];
+        sprintf(sysArgs, SYSTEM_REMOVE " %s", name);
+        system(sysArgs);
+    // remove file "name"
     }
 
     return RUN;
@@ -488,7 +459,7 @@ void dispatchReady(){
 	oldHead->suspension_state = NOTSUSPENDED;
         //InsertPCB(oldHead);
 	char systemArgument[100];
-	char* executeCommand = "./execute ";
+	char* executeCommand = "./execute";
         
         sprintf(systemArgument, "%s %s %d", executeCommand, oldHead->file_name, oldHead->offset+1);
 	//system("./execute " oldHead->path offsetString);
