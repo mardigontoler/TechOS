@@ -88,6 +88,7 @@ int main(int argc, char **argv)
 //         fgets(namePtr, length, stdin);
 // }
 
+<<<<<<< HEAD
 char* findName(int numTokens, char **tokens){
     optind = 1; // help out getopt function
     int c;
@@ -109,6 +110,10 @@ char* findName(int numTokens, char **tokens){
     }
     }
     return NULL;    
+=======
+char* getName(char *namePtr, int length){
+    fgets(namePtr, length, stdin);
+>>>>>>> 00a4672f3b74530af30d13b7d878c80927a3fc60
 }
 
 
