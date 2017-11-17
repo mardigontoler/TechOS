@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/stat.h>
+#include <dirent.h>
 
 #include "datetime.h"
 #include "help.h"
@@ -32,7 +34,7 @@ void dispatchReady();
 
 int main(int argc, char **argv)
 {
-    
+
     // get input in a loop
     int running = RUN;
     char input[MAXINPUTSIZE];
@@ -43,10 +45,10 @@ int main(int argc, char **argv)
     time_t t;
     localtime(&t);
     srand(t);
-    
+
     // set up queues
-    initQueues();    
-    
+    initQueues();
+
     InitDate(); // sets date to today's datedir
 
     // DEBUG for ls
@@ -69,7 +71,7 @@ int main(int argc, char **argv)
 		    tokens[numTokens - 1] = token;
 		}
 		token = strtok(NULL, " ");
-	    }	    
+	    }
 	    int validCommand = 0;
 	    if(isValidCommand(tokens[0])){
 		// let the command handler figure out the command and deal with the options
@@ -88,7 +90,6 @@ int main(int argc, char **argv)
 //         fgets(namePtr, length, stdin);
 // }
 
-<<<<<<< HEAD
 char* findName(int numTokens, char **tokens){
     optind = 1; // help out getopt function
     int c;
@@ -96,24 +97,34 @@ char* findName(int numTokens, char **tokens){
     int valid = 0;
     while((c = getopt(numTokens, tokens, "n:")) != -1){
         switch(c){
-    case 'n':
-        name = optarg;
-        valid = 1;
-        break;
-    default:;
+        case 'n':
+            name = optarg;
+            valid = 1;
+            break;
+        default:;
         }
         if(valid){
-        return name;
+            return name;
         }
-    else{
-        printf(REDCOLOR "ERROR: You must specify a name.\n");
+        else{
+            printf("ERROR: You must specify a name.\n");
+        }
     }
-    }
-    return NULL;    
-=======
+    return NULL;
+}
+
+
 char* getName(char *namePtr, int length){
+    printf("Enter the name:\n");
     fgets(namePtr, length, stdin);
->>>>>>> 00a4672f3b74530af30d13b7d878c80927a3fc60
+    // replace newline character with null terminator
+    for(int i = 0; i < length; i++){
+        if(namePtr[i] == '\n'){
+            namePtr[i] = '\0';
+            return namePtr;;
+        }
+    }
+    return NULL;
 }
 
 
@@ -159,7 +170,7 @@ int COMHAN(int numTokens, char **tokens)
     char* command = tokens[0];
     char *cvalue = NULL; // used to hold onto the optarg for the help function
     // use getopt, usually used to parse argv
-    
+
     // every time COMHAN is called we want to reuse getopt, so we help it out with its index
     optind = 1;
     if(matches(command,SETDATECOMMAND)){
@@ -189,7 +200,7 @@ int COMHAN(int numTokens, char **tokens)
 	}
 	else{printf(SETDATEUSAGE);}
     }
-    
+
     /* Time */
     else if(matches(command, TIMECOMMAND)){
 	char timeOption = 't';
@@ -198,7 +209,7 @@ int COMHAN(int numTokens, char **tokens)
 	}
 	printf("\n%s",GetTime(timeOption));
     }
-    
+
     /* Help */
     else if(matches(command, HELPCOMMAND)){
 	int helped = 0;
@@ -215,7 +226,7 @@ int COMHAN(int numTokens, char **tokens)
 	    help("\0",1); // show all commands
 	}
     }
-    
+
     /* Date */
     else if(matches(command, SHOWDATECOMMAND)){
 	char dateOption = 'F';
@@ -224,12 +235,12 @@ int COMHAN(int numTokens, char **tokens)
 	}
 	printf("\n%s\n",GetDate(dateOption));
     }
-    
+
     /* Version */
     else if(matches(command, VERSIONCOMMAND)){
 	displayVersion();
     }
-    
+
     /* Exit */
     else if(matches(command, TERMINATECOMMAND)){
 	char prompt[10];
@@ -238,7 +249,7 @@ int COMHAN(int numTokens, char **tokens)
 	if(prompt[0] == 'y')
 	    return STOP;
     }
-    
+
     /* Priority */
     else if(matches(command, SETPRIORITYCOMMAND)){
 	char *name;
@@ -261,7 +272,7 @@ int COMHAN(int numTokens, char **tokens)
 		RemovePCB(pcb_ptr);
 		pcb_ptr->priority = priority;
 		InsertPCB(pcb_ptr);
-		
+
 	    }
 	    else{
 		printf(REDCOLOR "The process was not found, so no priorities were changed.\n" DEFAULTCOLOR);
@@ -272,7 +283,7 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", SETPRIORITYUSAGE);
 	}
     }
-    
+
     /* PCB */
     else if(matches(command, SHOWPCBCOMMAND)){
 	pcb* ptr;
@@ -283,25 +294,25 @@ int COMHAN(int numTokens, char **tokens)
 	    printf("\n%s\n", SHOWPCBUSAGE);
 	}
     }
-    
+
     /* Processes */
     else if(matches(command, SHOWPROCESSESCOMMAND)){
 	printAllProcesses();// show processes
     }
-    
+
     /* Ready */
     else if(matches(command, SHOWREADYPROCESSESCOMMAND)){
 	// show ready processes
 	printReadyProcesses();
     }
-    
+
     /* Blocked */
     else if(matches(command, SHOWBLOCKEDPROCESSESCOMMAND)){
 	// show blocked processes
 	printBlockedProcesses();
     }
-    
-    
+
+
     /* Delete */
     else if(matches(command, DELETEPCBCOMMAND)){
 	pcb *ptr;
@@ -312,7 +323,7 @@ int COMHAN(int numTokens, char **tokens)
 	else{
 	    printf("\n%s\n", DELETEPCBUSAGE);
 	}
-    } 	
+    }
 
     /* Dispatch */
     else if(matches(command, DISPATCHCOMMAND)){
@@ -346,7 +357,7 @@ int COMHAN(int numTokens, char **tokens)
                 break;
             default:
                 valid -= 1;
-                break;          
+                break;
             }
         }
         if(nameSet == 0 || prioritySet == 0 || filenameSet == 0){
@@ -358,7 +369,7 @@ int COMHAN(int numTokens, char **tokens)
         else{
             //printf("\nCreating process %s with priority %d from file %s", name, priority, file_name);
             pcb* ptr = LoadProcess(name, priority, file_name);
-        }           
+        }
     }
 
     /* ls */
@@ -391,9 +402,11 @@ int COMHAN(int numTokens, char **tokens)
 
     /* cd */
     else if(matches(command, CHANGEDIRCOMMAND)){
-        char *name = findName(numTokens, tokens);
+        char name[1000];
+        getName(name, 999);
 
-        if(name != NULL && chdir(name)){
+        if(name == NULL || chdir(name) == -1){
+            printf("%s\n",name);
             printf("\nERROR: Could not find directory %s.", name);
             strcpy(name, "");
         }
@@ -403,29 +416,54 @@ int COMHAN(int numTokens, char **tokens)
 
     /* mkdir */
     else if(matches(command, CREATEFOLDERCOMMAND)){
-        char *name = findName(numTokens, tokens);
-        char sysArgs[1000];
-        sprintf(sysArgs, SYSTEM_MAKEDIR " %s", name);
-        system(sysArgs);
-    //create the folder. Name stored in name, NULL if they didnt enter correctly
+        char name[1000];
+        getName(name, 999);
+        // check first if directory already exists
+        DIR* directory;
+        directory = opendir(name);
+        if(directory){
+            closedir(directory);
+            printf(REDCOLOR "ERROR: This directory already exists.");
+        }
+        else{
+            /* sprintf(sysArgs, SYSTEM_MAKEDIR " %s", name); */
+            /* system(sysArgs); */
+            //create the folder. Name stored in name, NULL if they didnt enter correctly
+        }
     }
 
     /* rmdir */
     else if(matches(command, REMOVEFOLDERCOMMAND)){
-        char *name = findName(numTokens, tokens);
-        char sysArgs[1000];
-        sprintf(sysArgs, SYSTEM_REMOVE " -r %s", name);
-        system(sysArgs);
+        char name[1000];
+        getName(name, 999);
+        if(rmdir(name) != 0){
+            printf(REDCOLOR "ERROR: This directory is not empty.\n");
+        }
+        else{
+            printf(REDCOLOR "ERROR: That directory does not exist.\n");
+        }
+
+        /* sprintf(sysArgs, SYSTEM_REMOVE " -r %s", name); */
+        /* system(sysArgs); */
     // remove folder "name"
     }
 
     /* mkfile */
     else if(matches(command, CREATEFILECOMMAND)){
-        char *name = findName(numTokens, tokens);
-        char sysArgs[1000];
-        sprintf(sysArgs, SYSTEM_TOUCH " %s", name);
-        system(sysArgs);
-    // create file "name"
+        char name[1000];
+        /* sprintf(sysArgs, SYSTEM_TOUCH " %s", name); */
+        /* system(sysArgs); */
+        getName(name, 999);
+        // Check if file exists
+        FILE* f;
+        if((f = fopen(name, "r")) != NULL){
+            printf(REDCOLOR "ERROR: That file already exists.");
+            fclose(f);
+        }
+        else{
+            f = fopen(name, "w");
+            fclose(f);
+        }
     }
 
     /* rm file */
@@ -447,7 +485,7 @@ int COMHAN(int numTokens, char **tokens)
  * has experienced an interupt
  **/
 void dispatchReady(){
-    pcb* oldHead = GetNextReadyNotSuspended();    
+    pcb* oldHead = GetNextReadyNotSuspended();
     if(oldHead == NULL){
 	printf(REDCOLOR "ERROR: No ready processes to dispatch!\n");
 	return;
@@ -460,7 +498,7 @@ void dispatchReady(){
         //InsertPCB(oldHead);
 	char systemArgument[100];
 	char* executeCommand = "./execute";
-        
+
         sprintf(systemArgument, "%s %s %d", executeCommand, oldHead->file_name, oldHead->offset+1);
 	//system("./execute " oldHead->path offsetString);
 	// need to copy info into systemArgument and use that to cal system()

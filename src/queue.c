@@ -74,7 +74,7 @@ pcb* SetupPCB(char* process_name, int priority, char* file_name) {
 
     if(strlen(process_name)>8){
         printf("\nERROR: The name of this process is larger than 8 characters.");
-        return NULL; 
+        return NULL;
     }
     if(priority > 9 || priority < 0){
         printf("\nERROR: The priority isn't between 0 and 9.");
@@ -98,7 +98,7 @@ pcb* FindInQueue(char* name, struct queue* q){
 	return NULL;
     }
     do {
-	
+
         if(strcmp(name, find_pcb->process_name) == 0) {
             return find_pcb;
         }
@@ -113,7 +113,7 @@ pcb* FindInQueue(char* name, struct queue* q){
  * @return - Pointer to the found pcb or NULL if not found.
  */
 pcb* FindPCB(char* name){
-    
+
     pcb* result;
     result = FindInQueue(name, &ready_queue);
     if(result != NULL)
@@ -373,5 +373,3 @@ pcb* GetNextBlockedNotSuspended(){
 pcb* GetNextBlockedSuspended(){
     return suspended_blocked_queue.head;
 }
-
-
