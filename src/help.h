@@ -61,7 +61,7 @@
     ":\n" SHOWDATECOMMAND " (-d | -D | -f | -F | -g | -G | -m | -s | -y)\n"
 
 #define HELPUSAGE "\nUsage for " HELPCOMMAND		\
-    ":\n" HELPCOMMAND " [-c <command>]\n\nExample:\nhelp -c time\n" 
+    ":\n" HELPCOMMAND " [-c <command>]\n\nExample:\nhelp -c time\n"
 
 #define VERSIONUSAGE "\nUsage for " VERSIONCOMMAND ":\n" VERSIONCOMMAND
 
@@ -83,7 +83,7 @@
 #define CREATEPCBUSAGE "\nCreates a PCB\nUsage for " CREATEPCBCOMMAND	\
     ":\n" CREATEPCBCOMMAND " -n <name> -p<priority> -c<class>\n" \
     " \nThe priority is a number from 0 to 9."							\
-    "\nThere is no space between the -p and the priority or -c and the class.\n" 
+    "\nThere is no space between the -p and the priority or -c and the class.\n"
 
 #define DELETEPCBUSAGE "\nUsage for " DELETEPCBCOMMAND	\
     ":\n" DELETEPCBCOMMAND " -n <name>"
@@ -104,19 +104,19 @@
     ":\n" LOADCOMMAND " -n <process_name> -p <priority> -f <filename>"
 
 #define VIEWDIRUSAGE "\nUsage for " VIEWDIRCOMMAND	\
-    ":\n " VIEWDIRCOMMAND " (-p <path>) (-s) "		\
-    "\nIf you specify -p it must be followed by the path you wish to view." \
+    ":\n " VIEWDIRCOMMAND "(-p)  (-s) "		\
+    "\nIf you specify -p you will be prompted for the path to view."\
     "\nSpecifying -s will show the sizes of files.\n"
 
 #define CHANGEDIRUSAGE "\nUsage for " CHANGEDIRCOMMAND	\
-    ":\n " CHANGEDIRCOMMAND " -p <path> \n"
+    ":\n " CHANGEDIRCOMMAND " \nYou will be prompted for the path.\n"
 
 #define CREATEFOLDERUSAGE "\nUsage for " CREATEFOLDERCOMMAND	\
-    ":\n " CREATEFOLDERCOMMAND " -n <name> \n"			\
+    ":\n " CREATEFOLDERCOMMAND "\nYou will be prompted for the path.\n" \
     "Creates a folder in the current directory with name <name>.\n"
 
 #define REMOVEFOLDERUSAGE "\nUsage for " REMOVEFOLDERCOMMAND	\
-    ":\n " REMOVEFOLDERCOMMAND " -n <name> \n"			\
+    ":\n " REMOVEFOLDERCOMMAND " \nYou will be prompted for the path.\n" \
     "Removes a folder in the current directory with name <name>.\n"
 
 #define CREATEFILEUSAGE "\nUsage for " CREATEFILECOMMAND	\
