@@ -3,8 +3,8 @@
 
 #include "queue.h"
 
-#define COMPLETIONDATE "10/27/2017"
-#define VERSION "3.0"
+#define COMPLETIONDATE "12/7/2017"
+#define VERSION "5.0"
 
 #define BLUECOLOR "\e[34m"
 #define YELLOWCOLOR "\e[93m"
@@ -12,7 +12,7 @@
 #define DEFAULTCOLOR "\e[39m"
 #define REDCOLOR "\e[91m"
 
-#define NUMCOMMANDS (19)
+#define NUMCOMMANDS (24)
 #define MAXPROCESSNAMESIZE (8)
 
 #define HELPCOMMAND "help"
@@ -43,6 +43,12 @@
 #define REMOVEFOLDERCOMMAND "rmdir"
 #define CREATEFILECOMMAND "mkfile"
 #define REMOVEFILECOMMAND "rmfile"
+// R5 commands
+#define CREATEUSERCOMMAND "newuser"
+#define REMOVEUSERCOMMAND "removeuser"
+#define CHANGEPASSWORDCOMMAND "password"
+#define ADDADMINCOMMAND "promote"
+#define REMOVEADMINCOMMAND "demote"
 
 #define DISPATCHUSAGE "\nUsage for " DISPATCHCOMMAND	\
     "\n " DISPATCHCOMMAND "\nBegins all processes that are ready.\n"
@@ -127,6 +133,26 @@
     ":\n " REMOVEFILECOMMAND " -n <name>"				\
     "\nRemoves a file in the current directory with name <name>.\n"
 
+#define CREATEUSERUSAGE "\nUsage for " CREATEUSERCOMMAND    \
+    ":\n " CREATEUSERCOMMAND" -n <name> -p <password> -a" \
+    "\nCreates a new user that can login to the system." \
+    "\n     -a makes a new admin"
+
+#define REMOVEUSERUSAGE "\nUsage for " REMOVEUSERCOMMAND    \
+    ":\n " REMOVEUSERCOMMAND" -n <name>\n"  \
+    "\nRemoves a user."
+
+#define CHANGEPASSWORDUSAGE "\nUsage for " CHANGEPASSWORDCOMMAND    \
+    ":\n " CHANGEPASSWORDCOMMAND" -n <name>"    \
+    "\nOpens a program that requests information about password changes\n"
+
+#define ADDADMINUSAGE "\nUsage for " ADDADMINCOMMAND    \
+    ":\n " ADDADMINCOMMAND" -n <name>"  \
+    "\nGives administrator privleges to a user.\n"
+
+#define REMOVEADMINUSAGE "\nUsage for " REMOVEADMINCOMMAND    \
+    ":\n " REMOVEADMINCOMMAND" -n <name>"   \
+    "\nGives administrator privleges to a user.\n"
 
 int isValidCommand(char *);
 int matches(char *, char *);

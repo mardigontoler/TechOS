@@ -11,6 +11,9 @@
 #include "datetime.h"
 #include "help.h"
 #include "queue.h"
+#include "security.h"
+#include "history.h"
+
 
 // Windows definitions
 // Linux definitions
@@ -27,6 +30,8 @@
 int COMHAN(int, char**);
 void dispatchReady();
 
+User main_user;
+
 
 int main(int argc, char **argv)
 {
@@ -42,20 +47,39 @@ int main(int argc, char **argv)
     localtime(&t);
     srand(t);
 
+    /* Security */
+    LoadUsers();
+
     // set up queues
     initQueues();
 
     InitDate(); // sets date to today's datedir
 
+    if (initLogFile() == NULL) {
+        return 0;
+    }
+
+
     // DEBUG for ls
     chdir(DIR_MAIN);
 
+    int user_id = UserLogin();
+    if (user_id == -1) {
+        printf("\nAccess Denied\n");
+        return -1;
+    }
+
+    main_user = GetUser(user_id);
+
+    printf("\nWelcome, %s!\n", main_user.username);
 
     while(running){
         printf("\n" BLUECOLOR "TechOS >" DEFAULTCOLOR);
         numTokens = 0;
         if(fgets(input, MAXINPUTSIZE - MAXTOKENS - 1, stdin) != NULL)
         {
+            saveCommand(input);
+
             // convert input into tokens for parsing options
             token = strtok(input, " ");
             while(token != NULL && numTokens < MAXTOKENS){
@@ -475,6 +499,121 @@ int COMHAN(int numTokens, char **tokens)
         }
         else{
             printf("Successfully removed file %s.\n", name);
+        }
+    }
+
+    /* Create User */
+    else if(matches(command, CREATEUSERCOMMAND)) {
+        char username[16];
+        char password[16];
+        int adminflag = 0;
+        int unflag = 0;
+        int pwflag = 0;
+        while((c = getopt(numTokens, tokens, "n:p:a")) != -1) {
+            switch(c) {
+                case 'n':
+                    unflag = 1;
+                    strcpy(username, optarg);
+                    break;
+                case 'p':
+                    pwflag = 1;
+                    strcpy(password, optarg);
+                    break;
+                case 'a':
+                    adminflag = 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (adminflag == 1 && unflag == 1 && pwflag == 1){
+            CreateUser(username, password, ADMIN, main_user.authority);
+        }
+        else if (adminflag == 0 && unflag == 1 && pwflag == 1){
+            CreateUser(username, password, BASIC, main_user.authority);
+        }
+        else {
+            printf(CREATEUSERUSAGE);
+        }
+    }
+
+    /* Remove User */
+    else if(matches(command, REMOVEUSERCOMMAND)) {
+        char username[16];
+        while((c = getopt(numTokens, tokens, "n:")) != -1) {
+            switch(c) {
+                case 'n':
+                    strcpy(username, optarg);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (username != NULL){
+            RemoveUser(username,  main_user.authority);
+        }
+        else {
+            printf(REMOVEUSERUSAGE);
+        }
+    }
+
+    /* Change Password */
+    else if(matches(command, CHANGEPASSWORDCOMMAND)) {
+        char username[16];
+        while((c = getopt(numTokens, tokens, "n:")) != -1) {
+            switch(c) {
+                case 'n':
+                    strcpy(username, optarg);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (username != NULL){
+            ChangePassword(username, main_user.username);
+        }
+        else {
+            printf(CHANGEPASSWORDUSAGE);
+        }
+    }
+
+    /* Add Admin */
+    else if(matches(command, ADDADMINCOMMAND)) {
+        char username[16];
+        while((c = getopt(numTokens, tokens, "n:")) != -1) {
+            switch(c) {
+                case 'n':
+                    strcpy(username, optarg);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (username != NULL){
+            AddAdmin(username, main_user.authority);
+        }
+        else {
+            printf(ADDADMINUSAGE);
+        }
+    }
+
+    /* Remove Admin */
+    else if(matches(command, REMOVEADMINCOMMAND)) {
+        char username[16];
+        while((c = getopt(numTokens, tokens, "n:")) != -1) {
+            switch(c) {
+                case 'n':
+                    strcpy(username, optarg);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (username != NULL){
+            RemoveAdmin(username, main_user.authority);
+        }
+        else {
+            printf(REMOVEADMINUSAGE);
         }
     }
 
